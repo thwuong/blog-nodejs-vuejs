@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 module.exports = async () => {
   try {
     await mongoose.connect(
-      `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@cluster0.scxbxju.mongodb.net/?retryWrites=true&w=majority`,
+      `mongodb+srv://bong123:${process.env.PASSWORD}@cluster0.scxbxju.mongodb.net/?retryWrites=true&w=majority`,
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
