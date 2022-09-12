@@ -1,8 +1,5 @@
 const { Schema, default: mongoose } = require("mongoose");
 const profileSchema = new Schema({
-  name: {
-    type: String,
-  },
   avatar: {
     type: String,
   },

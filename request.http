@@ -1,0 +1,17 @@
+GET  http://localhost:3000/api/auth/ HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjMwZDgyNzRjNzdmNjllNDRmMmFkMTE5IiwiaWF0IjoxNjYyOTc3NjI2fQ.d8I4YeulQ_4X7OkgCbifbktJaN7IAd8RDKpuZHeoA6c
+
+###
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "username" : "test123",
+    "password" : "test12"
+}
+###
+
+PUT http://localhost:3000/api/auth/setting
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjMwZDgyNzRjNzdmNjllNDRmMmFkMTE5IiwiaWF0IjoxNjYyOTc3NjI2fQ.d8I4YeulQ_4X7OkgCbifbktJaN7IAd8RDKpuZHeoA6c
