@@ -15,3 +15,7 @@ Content-Type: application/json
 PUT http://localhost:3000/api/auth/setting
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjMwZDgyNzRjNzdmNjllNDRmMmFkMTE5IiwiaWF0IjoxNjYyOTc3NjI2fQ.d8I4YeulQ_4X7OkgCbifbktJaN7IAd8RDKpuZHeoA6c
+
+{
+    
+}

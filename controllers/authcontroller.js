@@ -6,7 +6,7 @@ class authController {
   async getUser(req, res, next) {
     try {
       const user = await Auth.findById(req.userId).select("-password");
-      console.log(user);
+      // console.log(user);
       if (!user) {
         return res
           .status(400)
@@ -94,20 +94,18 @@ class authController {
   async updateProfile(req, res) {
     const filename = req.file?.filename || "";
     const { username, email } = req.body;
+
     const condition = { _id: req.userId };
+
     try {
       let userUpdate = {
         username,
-        profile: {
-          email,
-          avatar: filename,
-        },
+        email,
+        avatar: filename,
       };
-
       userUpdate = await Auth.findOneAndUpdate(condition, userUpdate, {
         new: true,
       }).select("-password");
-
       res.status(200).json({
         success: true,
         message: "Updated profile successfully!",

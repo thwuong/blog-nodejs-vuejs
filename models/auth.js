@@ -1,12 +1,5 @@
 const { Schema, default: mongoose } = require("mongoose");
-const profileSchema = new Schema({
-  avatar: {
-    type: String,
-  },
-  email: {
-    type: String,
-  },
-});
+
 const authSchema = new Schema(
   {
     username: {
@@ -18,7 +11,12 @@ const authSchema = new Schema(
       type: String,
       require: true,
     },
-    profile: { profileSchema },
+    avatar: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
   },
   {
     timestamps: true,
