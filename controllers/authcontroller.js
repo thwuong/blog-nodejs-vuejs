@@ -1,5 +1,5 @@
 // auth model
-const Auth = require("../models/auth");
+const Auth = require("../models/authModel");
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 class authController {
