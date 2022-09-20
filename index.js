@@ -8,9 +8,9 @@ const connectDb = require("./db/connectdb");
 const route = require("./routes");
 //middleware
 app.use(cors());
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(express.json());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 connectDb();
 route(app);
 app.listen(port, () => {

@@ -2,11 +2,11 @@
 const Auth = require("../models/authModel");
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
 class authController {
   async getUser(req, res, next) {
     try {
       const user = await Auth.findById(req.userId).select("-password");
-      // console.log(user);
       if (!user) {
         return res
           .status(400)
@@ -22,16 +22,23 @@ class authController {
   }
   async login(req, res) {
     const { username, password } = req.body;
+
     if (!username || !password) {
       return res.status(401).json({
         success: false,
-        message: "username or password empty",
+        message: "Missing password or username",
       });
     }
     try {
       const user = await Auth.findOne({ username: username });
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          message: "user not found",
+        });
+      }
       const passwordValid = await argon2.verify(user.password, password);
-      if (!passwordValid) {
+      if (passwordValid) {
         const token = jwt.sign({ payload: user._id }, process.env.SECRECT);
         res.status(200).json({
           success: true,
@@ -54,20 +61,27 @@ class authController {
   }
   async register(req, res) {
     const { username, password, comfirmPassword } = req.body;
+
     if (!username || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing password or username",
+      });
+    }
+    const user = await Auth.findOne({ username: username });
+    if (user) {
       return res.status(401).json({
         success: false,
-        message: "username or password empty",
+        message: "user is existing",
       });
     }
     if (password !== comfirmPassword) {
       return res.status(402).json({
         success: false,
-        message: "password not match",
+        message: "password not matched",
       });
     }
     try {
-      // hash password
       const hashPassword = await argon2.hash(password);
       const newUser = new Auth({
         username,
@@ -75,7 +89,6 @@ class authController {
       });
 
       await newUser.save();
-      // create token
       const token = jwt.sign({ payload: newUser._id }, process.env.SECRECT);
 
       res.status(200).json({
@@ -96,6 +109,17 @@ class authController {
     const { username, email } = req.body;
 
     const condition = { _id: req.userId };
+
+    const fileAvatar = await Auth.findById(req.userId).select("avatar");
+
+    if (fileAvatar) {
+      const pathFileAvatar = `uploads/avatar/${fileAvatar.avatar}`;
+      fs.unlink(pathFileAvatar, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
 
     try {
       let userUpdate = {

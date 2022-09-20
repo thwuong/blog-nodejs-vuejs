@@ -3,6 +3,7 @@ const passport = (req, res, next) => {
   const authToken = req.headers["authorization"];
   // authorization Baser ádfkajsdlfjaskldfja
   const token = authToken && authToken.split(" ")[1];
+
   if (!token) {
     return res
       .status(401)

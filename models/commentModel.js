@@ -9,6 +9,10 @@ const commentSchema = new Schema(
       ref: "Comment",
       type: Schema.Types.ObjectId,
     },
+    blog: {
+      ref: "Blog",
+      type: Schema.Types.ObjectId,
+    },
   },
   { timestamps: true }
 );
