@@ -36,8 +36,24 @@ class BlogController {
     }
   }
   async getBlogs(req, res) {
+    const regex =
+      req.query.title !== undefined
+        ? { $regex: new RegExp(req.query.title), $options: "i" }
+        : {};
+    const filter =
+      req.query.tags !== undefined
+        ? { $elemMatch: { tags: req.query.tags } }
+        : {};
+    console.log(regex, filter);
+    let blogs = {};
     try {
-      const blogs = await Blog.find({}).populate("author", "username");
+      if (req.query.title) {
+        blogs = await Blog.find({
+          title: regex,
+        });
+      } else {
+        blogs = await Blog.find({}).populate("author", "username");
+      }
 
       res.status(200).json({
         success: true,
@@ -51,10 +67,23 @@ class BlogController {
       });
     }
   }
-  getBlog(req, res) {
-    res.json({
-      message: "Get one blog",
-    });
+  async getBlog(req, res) {
+    const condition = { _id: req.params.id };
+
+    try {
+      const blog = await Blog.findOne(condition).populate("author", "username");
+
+      res.status(200).json({
+        success: true,
+        message: "get blog successfully!",
+        blog,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message || "Internal Server Error!",
+      });
+    }
   }
   async removeBlog(req, res) {
     const condition = { _id: req.params.id, author: req.userId };

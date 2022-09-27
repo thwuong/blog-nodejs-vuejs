@@ -105,20 +105,22 @@ class authController {
     }
   }
   async updateProfile(req, res) {
-    const filename = req.file?.filename || "";
+    const filename = req.file?.filename;
     const { username, email } = req.body;
 
     const condition = { _id: req.userId };
 
     const fileAvatar = await Auth.findById(req.userId).select("avatar");
 
-    if (fileAvatar) {
-      const pathFileAvatar = `uploads/avatar/${fileAvatar.avatar}`;
-      fs.unlink(pathFileAvatar, (err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
+    if (filename) {
+      if (fileAvatar) {
+        const pathFileAvatar = `uploads/avatar/${fileAvatar.avatar}`;
+        fs.unlink(pathFileAvatar, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      }
     }
 
     try {
