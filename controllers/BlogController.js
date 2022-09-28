@@ -36,24 +36,23 @@ class BlogController {
     }
   }
   async getBlogs(req, res) {
-    const regex =
-      req.query.title !== undefined
-        ? { $regex: new RegExp(req.query.title), $options: "i" }
-        : {};
-    const filter =
-      req.query.tags !== undefined
-        ? { $elemMatch: { tags: req.query.tags } }
-        : {};
-    console.log(regex, filter);
-    let blogs = {};
+    let regex = {};
+    let filter = {};
+    if (req.query.keyword) {
+      regex = {
+        title: { $regex: new RegExp(req.query.keyword), $options: "i" },
+      };
+    }
+    if (req.query.tags) {
+      filter = {
+        tags: req.query.tags.split(","),
+      };
+    }
+
     try {
-      if (req.query.title) {
-        blogs = await Blog.find({
-          title: regex,
-        });
-      } else {
-        blogs = await Blog.find({}).populate("author", "username");
-      }
+      const blogs = await Blog.find(regex)
+        .where(filter)
+        .populate("author", "username");
 
       res.status(200).json({
         success: true,
@@ -112,10 +111,11 @@ class BlogController {
       });
     }
   }
-  editBlog(req, res) {
-    res.json({
-      message: "Edit blog",
-    });
+  async editBlog(req, res) {
+    const condition = { author: req.userId, _id: req.params.id };
+    // const { title, body, tags } = req.body;
+    // const image = req.file?.filename;
+    console.log(req.body);
   }
 }
 

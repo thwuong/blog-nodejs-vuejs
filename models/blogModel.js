@@ -14,8 +14,8 @@ const blogSchema = new Schema(
     },
     tags: {
       type: String,
-      enum: ["Technology", "Entertainment", "Law", "Sports", "Orther"],
-      default: "Orther",
+      enum: ["technology", "entertainment", "law", "sports", "orther"],
+      default: "orther",
     },
     comments: [
       {

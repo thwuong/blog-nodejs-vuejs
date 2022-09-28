@@ -45,3 +45,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjMwZ
     "title" : "bai viet dau tien",
     "body" : " co gai ay that dep",
 }
+
+###
+PUT  http://localhost:3000/api/blog/6332b4fc6dd10fab05e1c313
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjMzMmI0ODE2ZGQxMGZhYjA1ZTFjMzBmIiwiaWF0IjoxNjY0MjY3NDE4fQ.RvD8dl3Cx_-C3PMJ9qof0Suw3AuZDv3_Oh52PC2QgCA
+
+{
+    "title" : "bai viet dau tien",
+    "body" : " co gai ay that dep",
+}
