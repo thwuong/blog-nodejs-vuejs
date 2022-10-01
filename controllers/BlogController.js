@@ -113,9 +113,44 @@ class BlogController {
   }
   async editBlog(req, res) {
     const condition = { author: req.userId, _id: req.params.id };
-    // const { title, body, tags } = req.body;
-    // const image = req.file?.filename;
-    console.log(req.body);
+    const { title, body, tags } = req.body;
+    const image = req.file?.filename;
+
+    if (image) {
+      const fileImage = await Blog.findOne(condition).select("image");
+      if (fileImage.image) {
+        const pathfileImage = `uploads/image/${fileImage.image}`;
+        fs.unlink(pathfileImage, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      }
+    }
+
+    let blogUpdate = {
+      title: title,
+      body: body,
+      image,
+      tags: tags,
+    };
+    // update blog
+    try {
+      blogUpdate = await Blog.findOneAndUpdate(condition, blogUpdate, {
+        new: true,
+      }).populate("author", "username");
+
+      res.status(202).json({
+        success: true,
+        message: "Blog edited successfully!",
+        blogUpdate,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+      });
+    }
   }
 }
 

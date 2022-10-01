@@ -110,10 +110,9 @@ class authController {
 
     const condition = { _id: req.userId };
 
-    const fileAvatar = await Auth.findById(req.userId).select("avatar");
-
     if (filename) {
-      if (fileAvatar) {
+      const fileAvatar = await Auth.findById(req.userId).select("avatar");
+      if (fileAvatar.avatar) {
         const pathFileAvatar = `uploads/avatar/${fileAvatar.avatar}`;
         fs.unlink(pathFileAvatar, (err) => {
           if (err) {

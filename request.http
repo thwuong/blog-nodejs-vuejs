@@ -15,7 +15,7 @@ Content-Type: application/json
 ###
 
 POST http://localhost:3000/api/auth/login
-Content-Type: application/json
+Content-Type: application/x-www-form-urlencoded
 
 {
     "username" : "test122",
@@ -24,7 +24,7 @@ Content-Type: application/json
 ###
 
 PUT http://localhost:3000/api/auth/setting
-content-type: application/json
+content-type: application/x-www-form-urlencoded
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjMwZDgyNzRjNzdmNjllNDRmMmFkMTE5IiwiaWF0IjoxNjYyOTc3NjI2fQ.d8I4YeulQ_4X7OkgCbifbktJaN7IAd8RDKpuZHeoA6c
 
 {
@@ -47,11 +47,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjMwZ
 }
 
 ###
-PUT  http://localhost:3000/api/blog/6332b4fc6dd10fab05e1c313
+PUT  http://localhost:3000/api/blog/63371a589d37beedd0e28296
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjMzMmI0ODE2ZGQxMGZhYjA1ZTFjMzBmIiwiaWF0IjoxNjY0MjY3NDE4fQ.RvD8dl3Cx_-C3PMJ9qof0Suw3AuZDv3_Oh52PC2QgCA
+Content-Disposition: form-data; name="image",filenane="male-user.jpg";
+content-type: image/jpeg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNjMzNzE5ZDY5ZDM3YmVlZGQwZTI4MjkzIiwiaWF0IjoxNjY0NTU1NTA1fQ.uWVbW5UMnGi4PCBHNY6dEmwOoMM6MZJfKEOslN1x0rQ
 
 {
     "title" : "bai viet dau tien",
     "body" : " co gai ay that dep",
 }
+
+<D:/dowloads/male-user.jpg>

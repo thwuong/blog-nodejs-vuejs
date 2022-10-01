@@ -3,12 +3,14 @@ const { Schema, default: mongoose } = require("mongoose");
 const commentSchema = new Schema(
   {
     author: { ref: "Auth", type: Schema.Types.ObjectId },
-    body: { type: Text, require: true, trim: true },
-    date: { Date, default: Date.now },
-    comments: {
-      ref: "Comment",
-      type: Schema.Types.ObjectId,
-    },
+    body: { type: String, require: true, trim: true },
+    date: { type: Date, default: Date.now() },
+    replies: [
+      {
+        ref: "Comment",
+        type: Schema.Types.ObjectId,
+      },
+    ],
     blog: {
       ref: "Blog",
       type: Schema.Types.ObjectId,

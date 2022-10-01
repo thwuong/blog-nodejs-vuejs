@@ -6,13 +6,18 @@ const port = process.env.PORT;
 const bodyParser = require("body-parser");
 const connectDb = require("./db/connectdb");
 const route = require("./routes");
+connectDb();
 //middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "localhost:3001",
+  })
+);
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 route(app);
-app.use(bodyParser.urlencoded({ extended: false }));
-connectDb();
 app.listen(port, () => {
   console.log(`app listening on port http://localhost:${port}`);
 });

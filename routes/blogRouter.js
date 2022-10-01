@@ -11,7 +11,7 @@ Router.post(
 );
 Router.get("/:id", BlogController.getBlog);
 Router.delete("/:id", passport, BlogController.removeBlog);
-Router.put("/:id", passport, BlogController.editBlog);
+Router.put("/:id", passport, upload.single("image"), BlogController.editBlog);
 Router.get("/", BlogController.getBlogs);
 
 module.exports = Router;
