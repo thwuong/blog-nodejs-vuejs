@@ -1,8 +1,8 @@
 // models
-const Blog = require("../models/blogModel");
+const Post = require("../models/postModel");
 const fs = require("fs");
-class BlogController {
-  async createBlog(req, res) {
+class PostController {
+  async createPost(req, res) {
     const { title, body, tags } = req.body;
     const image = req.file?.filename;
 
@@ -14,7 +14,7 @@ class BlogController {
     }
 
     try {
-      const newBlog = new Blog({
+      const newPost = new Post({
         author: req.userId,
         title,
         body,
@@ -22,11 +22,11 @@ class BlogController {
         tags,
       });
 
-      await newBlog.save();
+      await newPost.save();
 
       res.status(200).json({
         success: true,
-        message: "Created new blog",
+        message: "Created new Post",
       });
     } catch (error) {
       res.status(500).json({
@@ -35,7 +35,7 @@ class BlogController {
       });
     }
   }
-  async getBlogs(req, res) {
+  async getPosts(req, res) {
     let regex = {};
     let filter = {};
     if (req.query.keyword) {
@@ -50,14 +50,14 @@ class BlogController {
     }
 
     try {
-      const blogs = await Blog.find(regex)
+      const posts = await Post.find(regex)
         .where(filter)
         .populate("author", "username");
 
       res.status(200).json({
         success: true,
-        message: "get blogs successfully!",
-        blogs,
+        message: "get posts successfully!",
+        posts,
       });
     } catch (error) {
       res.status(500).json({
@@ -66,16 +66,16 @@ class BlogController {
       });
     }
   }
-  async getBlog(req, res) {
-    const condition = { _id: req.params.blogId };
+  async getPost(req, res) {
+    const condition = { _id: req.params.postId };
 
     try {
-      const blog = await Blog.findOne(condition).populate("author", "username");
+      const post = await Post.findOne(condition).populate("author", "username");
 
       res.status(200).json({
         success: true,
         message: "get blog successfully!",
-        blog,
+        post,
       });
     } catch (error) {
       res.status(500).json({
@@ -84,14 +84,14 @@ class BlogController {
       });
     }
   }
-  async removeBlog(req, res) {
-    const condition = { _id: req.params.blogId, author: req.userId };
-    const fileImage = await Blog.findOne({ _id: req.params.id }).select(
+  async removePost(req, res) {
+    const condition = { _id: req.params.postId, author: req.userId };
+    const fileImage = await Post.findOne({ _id: req.params.id }).select(
       "image"
     );
     const pathFileUpload = `uploads/image/${fileImage.image}`;
     try {
-      const blogDeleted = await Blog.deleteOne(condition);
+      const postDeleted = await Post.deleteOne(condition);
 
       fs.unlink(pathFileUpload, (err) => {
         if (err) {
@@ -102,7 +102,7 @@ class BlogController {
       res.status(200).json({
         success: true,
         message: "Deleted blog successfully!",
-        blogDeleted,
+        postDeleted,
       });
     } catch (error) {
       res.status(500).json({
@@ -111,13 +111,13 @@ class BlogController {
       });
     }
   }
-  async editBlog(req, res) {
-    const condition = { author: req.userId, _id: req.params.blogId };
+  async editPost(req, res) {
+    const condition = { author: req.userId, _id: req.params.postId };
     const { title, body, tags } = req.body;
     const image = req.file?.filename;
 
     if (image) {
-      const fileImage = await Blog.findOne(condition).select("image");
+      const fileImage = await Post.findOne(condition).select("image");
       if (fileImage.image) {
         const pathfileImage = `uploads/image/${fileImage.image}`;
         fs.unlink(pathfileImage, (err) => {
@@ -128,7 +128,7 @@ class BlogController {
       }
     }
 
-    let blogUpdate = {
+    let postUpdate = {
       title: title,
       body: body,
       image,
@@ -136,14 +136,14 @@ class BlogController {
     };
     // update blog
     try {
-      blogUpdate = await Blog.findOneAndUpdate(condition, blogUpdate, {
+      postUpdate = await Blog.findOneAndUpdate(condition, postUpdate, {
         new: true,
       }).populate("author", "username");
 
       res.status(202).json({
         success: true,
         message: "Blog edited successfully!",
-        blogUpdate,
+        postUpdate,
       });
     } catch (error) {
       res.status(500).json({
@@ -152,18 +152,18 @@ class BlogController {
       });
     }
   }
-  async handleLikeBlog(req, res) {
+  async handleLikePost(req, res) {
     // get id user like and blog is liking
     // check user exsting likes if those user in likes remove user or revese
-    const condition = { _id: req.params.blogId };
+    const condition = { _id: req.params.postId };
     const userId = req.userId;
 
     try {
-      const blog = await Blog.findOne(condition).select("votes");
-      const check = [...blog.votes].some((vote) => vote.toString() === userId);
-      let blogUpdate = {};
+      const posts = await Blog.findOne(condition).select("votes");
+      const check = [...posts.votes].some((vote) => vote.toString() === userId);
+      let postUpdate = {};
       if (check) {
-        blogUpdate = await Blog.findByIdAndUpdate(
+        postUpdate = await Blog.findByIdAndUpdate(
           condition,
           {
             $pull: { votes: userId },
@@ -171,7 +171,7 @@ class BlogController {
           { new: true }
         );
       } else {
-        blogUpdate = await Blog.findByIdAndUpdate(
+        postUpdate = await Blog.findByIdAndUpdate(
           condition,
           {
             $push: { votes: userId },
@@ -182,7 +182,7 @@ class BlogController {
       // add socket
       res.status(201).json({
         success: true,
-        blogUpdate,
+        postUpdate,
       });
     } catch (error) {
       console.log(error);
@@ -192,18 +192,18 @@ class BlogController {
       });
     }
   }
-  async handleFavsBlog(req, res) {
+  async handleFavsPost(req, res) {
     // get id user like and blog is liking
     // check user exsting likes if those user in likes remove user or revese
     const condition = { _id: req.params.blogId };
     const userId = req.userId;
 
     try {
-      const blog = await Blog.findOne(condition).select("votes");
-      const check = [...blog.votes].some((vote) => vote.toString() === userId);
-      let blogUpdate = {};
+      const posts = await Blog.findOne(condition).select("votes");
+      const check = [...posts.votes].some((vote) => vote.toString() === userId);
+      let postUpdate = {};
       if (check) {
-        blogUpdate = await Blog.findByIdAndUpdate(
+        postUpdate = await Blog.findByIdAndUpdate(
           condition,
           {
             $pull: { favs: userId },
@@ -211,7 +211,7 @@ class BlogController {
           { new: true }
         );
       } else {
-        blogUpdate = await Blog.findByIdAndUpdate(
+        postUpdate = await Blog.findByIdAndUpdate(
           condition,
           {
             $push: { favs: userId },
@@ -222,7 +222,7 @@ class BlogController {
       // add socket
       res.status(201).json({
         success: true,
-        blogUpdate,
+        postUpdate,
       });
     } catch (error) {
       console.log(error);
@@ -234,4 +234,4 @@ class BlogController {
   }
 }
 
-module.exports = new BlogController();
+module.exports = new PostController();

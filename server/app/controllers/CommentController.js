@@ -1,11 +1,11 @@
 // models
 const Comment = require("../models/commentModel");
-const Blog = require("../models/blogModel");
+const Post = require("../models/postModel");
 class CommentController {
   async createComment(req, res) {
     const userId = req.userId;
     const { body } = req.body;
-    const blogId = req.params.blogId;
+    const postId = req.params.postId;
     if (!body) {
       return res.status(401).json({
         success: false,
@@ -17,12 +17,12 @@ class CommentController {
       const newComment = new Comment({
         author: userId,
         body,
-        blog: blogId,
+        post: postId,
       });
 
       await newComment.save();
-      await Blog.findByIdAndUpdate(
-        { _id: blogId },
+      await Post.findByIdAndUpdate(
+        { _id: postId },
         { $push: { comments: newComment._id } }
       );
 
@@ -40,15 +40,16 @@ class CommentController {
   }
   async removeComment(req, res) {
     const userId = req.userId;
-    const { blogId, id } = req.params;
-    const condition = { author: userId, _id: id, blog: blogId };
+    const { postId, id } = req.params;
+    const condition = { author: userId, _id: id, post: postId };
     try {
       const commentDeleted = await Comment.findOneAndDelete(condition);
-      await Blog.findOneAndUpdate({ _id: blogId }, { $pull: { comments: id } });
+      await Post.findOneAndUpdate({ _id: postId }, { $pull: { comments: id } });
 
       res.status(203).json({
         success: true,
         message: "deleted comment successfully!",
+        commentDeleted,
       });
     } catch (error) {
       console.log(error);

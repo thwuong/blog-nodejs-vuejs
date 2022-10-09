@@ -1,26 +1,26 @@
 import createHttp from "@/api/index";
 import authHeader from "@/services/authHeader";
 
-class blogService {
+class PostService {
   constructor() {
-    this.http = createHttp("/api/blog");
+    this.http = createHttp("/api/post");
   }
 
-  async createBlog(payload) {
-    return await this.http.post("/newBlog", payload, { headers: authHeader() });
+  async createPost(payload) {
+    return await this.http.post("/newpost", payload, { headers: authHeader() });
   }
-  async getsBlog() {
+  async getsPost() {
     return await this.http.get("/");
   }
-  async getBlog(id) {
+  async getPost(id) {
     return await this.http.get(`/${id}`);
   }
-  async editBlog(payload, id) {
+  async editPost(payload, id) {
     return await this.http.put(`/${id}/edit`, payload, {
       headers: authHeader(),
     });
   }
-  async removeBlog(id) {
+  async removePost(id) {
     return await this.http.delete(`/${id}/delete`, { headers: authHeader() });
   }
   async handlerLike(id) {
@@ -31,4 +31,4 @@ class blogService {
   }
 }
 
-export default new blogService();
+export default new PostService();

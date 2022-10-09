@@ -1,7 +1,7 @@
 import createHttp from "@/api/index";
 import authHeader from "@/services/authHeader";
 
-class authService {
+class AuthService {
   constructor() {
     this.http = createHttp("/api/auth");
   }
@@ -20,4 +20,4 @@ class authService {
   }
 }
 
-export default new authService();
+export default new AuthService();

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import authService from "../services/authService";
+import AuthService from "../services/AuthService";
 const user = JSON.parse(localStorage.getItem("user")) || null;
 export const useUserStore = defineStore("user", {
   state: () => {
@@ -19,7 +19,7 @@ export const useUserStore = defineStore("user", {
   actions: {
     async login(payload) {
       try {
-        const response = await authService.login(payload);
+        const response = await AuthService.login(payload);
         localStorage.setItem("user", response.data.token);
         if (response.data.success) {
           this.loggedIn = response.data.success;
@@ -28,6 +28,33 @@ export const useUserStore = defineStore("user", {
       } catch (error) {
         return error.response.data || error.message;
       }
+    },
+    async register(payload) {
+      try {
+        const response = await AuthService.register(payload);
+        localStorage.setItem("user", response.data.token);
+        if (response.data.success) {
+          this.loggedIn = response.data.success;
+          return response.data;
+        }
+      } catch (error) {
+        return error.response.data || error.message;
+      }
+    },
+    async updateProfile(payload) {
+      try {
+        const response = await AuthService.updateProfile(payload);
+        if (response.data.success) {
+          this.loggedIn = response.data.success;
+          return response.data;
+        }
+      } catch (error) {
+        return error.response.data || error.message;
+      }
+    },
+    logout() {
+      localStorage.removeItem("user");
+      this.loggedIn = !this.loggedIn;
     },
   },
 });

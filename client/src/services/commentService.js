@@ -1,21 +1,21 @@
 import createHttp from "@/api/index";
 import authHeader from "@/services/authHeader";
 
-class commentService {
+class CommentService {
   constructor() {
     this.http = createHttp("/api/comment");
   }
 
-  async createComment(payload, blogId) {
-    return await this.http.post(`${blogId}/newcomment`, payload, {
+  async createComment(payload, postId) {
+    return await this.http.post(`${postId}/newcomment`, payload, {
       headers: authHeader(),
     });
   }
-  async removeComment(id, blogId) {
-    return await this.http.delete(`/${blogId}/delete/${id}`, {
+  async removeComment(id, postId) {
+    return await this.http.delete(`/${postId}/delete/${id}`, {
       headers: authHeader(),
     });
   }
 }
 
-export default new commentService();
+export default new CommentService();
