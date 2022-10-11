@@ -6,8 +6,8 @@ class AuthService {
     this.http = createHttp("/api/auth");
   }
 
-  async getUser(payload) {
-    return await this.http.get("/", payload, { headers: authHeader() });
+  async getUser() {
+    return await this.http.get("/", { headers: authHeader() });
   }
   async login(payload) {
     return await this.http.post("/login", payload);

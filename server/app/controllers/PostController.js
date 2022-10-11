@@ -92,12 +92,13 @@ class PostController {
     const pathFileUpload = `uploads/image/${fileImage.image}`;
     try {
       const postDeleted = await Post.deleteOne(condition);
-
-      fs.unlink(pathFileUpload, (err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
+      if (fileImage.image) {
+        fs.unlink(pathFileUpload, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      }
 
       res.status(200).json({
         success: true,

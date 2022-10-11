@@ -1,5 +1,20 @@
 <script setup>
-import { useUserStore } from "@/stores/userStore.js";
+import { useAuthStore } from "@/stores/useAuthStore.js";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+const { login } = useAuthStore();
+const { user, loggedIn } = storeToRefs(useAuthStore());
+const router = useRouter();
+const handlerLogin = async (data) => {
+  const response = await login({
+    username: data.username,
+    password: data.password,
+  });
+  if (response.success) {
+    return router.push("/profile");
+  }
+  return alert(response.message);
+};
 </script>
 <template>
   <div>
@@ -61,7 +76,6 @@ import { useUserStore } from "@/stores/userStore.js";
   </div>
 </template>
 <script>
-import { mapState, mapActions } from "pinia";
 export default {
   data() {
     return {
@@ -71,22 +85,7 @@ export default {
       },
     };
   },
-  computed: {
-    ...mapState(useUserStore, { loggedIn: false }),
-  },
-  methods: {
-    ...mapActions(useUserStore, ["login"]),
-    async handlerLogin(data) {
-      const response = await this.login({
-        username: data.username,
-        password: data.password,
-      });
-      if (response.success) {
-        return this.$router.push("/profile");
-      }
-      return alert(response.message);
-    },
-  },
+  methods: {},
 };
 </script>
 <style></style>

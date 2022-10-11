@@ -12,12 +12,14 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3001,
+    origin: "http://localhost:3001",
     proxy: {
       "/api": {
         target: "http://localhost:3000/",
         changeOrigin: true,
       },
+      "/image": "http://localhost:3000/",
+      "/avatar": "http://localhost:3000/",
     },
   },
 });

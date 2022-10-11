@@ -1,13 +1,14 @@
 <script setup>
-// import { useUserStore } from "@/stores/userStore.js";
+import { useAuthStore } from "@/stores/useAuthStore.js";
+import { storeToRefs } from "pinia";
+import { computed, ref } from "vue";
+const { user } = storeToRefs(useAuthStore());
+const { getProfile } = useAuthStore();
+getProfile();
 </script>
 <template>
   <div>
-    <h1>Profile</h1>
+    <h1>{{ user.username }}</h1>
   </div>
 </template>
-<script>
-// import { mapState, mapActions } from "pinia";
-export default {};
-</script>
 <style></style>

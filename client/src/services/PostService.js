@@ -9,7 +9,7 @@ class PostService {
   async createPost(payload) {
     return await this.http.post("/newpost", payload, { headers: authHeader() });
   }
-  async getsPost() {
+  async getPosts() {
     return await this.http.get("/");
   }
   async getPost(id) {
