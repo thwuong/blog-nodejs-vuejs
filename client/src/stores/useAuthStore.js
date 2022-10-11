@@ -4,7 +4,7 @@ const token = JSON.parse(localStorage.getItem("user"));
 export const useAuthStore = defineStore("auth", {
   state: () => {
     return {
-      user: {},
+      userCurrent: {},
       loggedIn: token ? true : false,
     };
   },
@@ -48,7 +48,7 @@ export const useAuthStore = defineStore("auth", {
       try {
         const response = await AuthService.getUser();
         if (response.data.success) {
-          this.$patch({ user: response.data.user });
+          this.$patch({ userCurrent: response.data.user });
           return response.data;
         }
       } catch (error) {
@@ -57,7 +57,7 @@ export const useAuthStore = defineStore("auth", {
     },
     logout() {
       localStorage.removeItem("user");
-      this.$patch({ user: {}, loggedIn: !this.loggedIn });
+      this.$patch({ userCurrent: {}, loggedIn: !this.loggedIn });
     },
   },
 });
