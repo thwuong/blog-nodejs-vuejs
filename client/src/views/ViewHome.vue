@@ -1,13 +1,15 @@
 <script setup>
 import { useAuthStore } from "@/stores/useAuthStore.js";
 import { storeToRefs } from "pinia";
-import heroComponent from "@/components/heroComponent.vue";
+import HeroComponent from "@/components/heroComponent.vue";
+import ContentComponent from "@/components/ContentComponent.vue";
 const { login } = useAuthStore();
 const { userCurrent, loggedIn } = storeToRefs(useAuthStore());
 </script>
 <template>
   <div class="w-full">
-    <heroComponent />
+    <hero-component />
+    <content-component />
   </div>
 </template>
 <script>

@@ -1,8 +1,14 @@
-<script setup></script>
+<script setup>
+import PostHighlightComponent from "@/components/PostHighlightComponent.vue";
+</script>
 <template>
-  <div class="container">
-    <div class="content min-h-screen">
-      <div class="content__container"></div>
+  <div class="content mt-40">
+    <div class="container">
+      <div class="content__container mx-auto">
+        <div class="posts__highlight">
+          <post-highlight-component />
+        </div>
+      </div>
     </div>
   </div>
 </template>

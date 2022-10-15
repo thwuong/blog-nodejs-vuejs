@@ -66,6 +66,7 @@ class PostController {
       });
     }
   }
+
   async getPost(req, res) {
     const condition = { _id: req.params.postId };
 

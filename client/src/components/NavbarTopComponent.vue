@@ -12,7 +12,7 @@ const islogged = false;
         </div>
         <ul class="navbar__menu flex gap-6">
           <li class="navbar__item hover:text-blue-500">
-            <router-link to="/products">Products</router-link>
+            <router-link to="/posts">Posts</router-link>
           </li>
           <li class="navbar__item hover:text-blue-500">
             <router-link to="/products">Services</router-link>

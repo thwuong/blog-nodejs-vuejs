@@ -1,6 +1,6 @@
 <script setup>
 import { usePostStore } from "@/stores/usePostStore.js";
-import postComponent from "../components/postComponent.vue";
+import PostComponent from "../components/PostComponent.vue";
 import { storeToRefs } from "pinia";
 const { findPosts } = usePostStore();
 findPosts();

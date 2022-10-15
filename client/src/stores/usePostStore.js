@@ -6,6 +6,7 @@ export const usePostStore = defineStore("post", {
     return {
       posts: [],
       post: {},
+      postHighlight: [],
     };
   },
   actions: {
