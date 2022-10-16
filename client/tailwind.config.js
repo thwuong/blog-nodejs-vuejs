@@ -4,14 +4,10 @@ module.exports = {
   theme: {
     fontFamily: {
       primary: ["Mulish", "sans-serif"],
-      hero: ["Work Sans", "sans-serif"],
+      "card-title": ["Cabin", "sans-serif"],
       link: ["Karla", "sans-serif"],
     },
-    extend: {
-      backgroundImage: {
-        hero: "url('/src/assets/images/hero.jpg')",
-      },
-    },
+    extend: {},
   },
   plugins: [],
 };

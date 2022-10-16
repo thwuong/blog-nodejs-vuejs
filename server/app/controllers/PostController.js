@@ -53,13 +53,13 @@ class PostController {
       const posts = await Post.find(regex)
         .where(filter)
         .populate("author", "username");
-
       res.status(200).json({
         success: true,
         message: "get posts successfully!",
         posts,
       });
     } catch (error) {
+      console.log(error);
       res.status(500).json({
         success: false,
         message: error.message || "Internal Server Error!",

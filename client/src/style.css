@@ -3,30 +3,58 @@
 @tailwind utilities;
 @layer components {
   .btn-primary {
-    @apply py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700;
+    @apply py-3 px-5 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700;
   }
   .btn-secondary {
-    @apply py-2 px-4 bg-transparent border-blue-500 border-2 rounded-md font-semibold;
-  }
-  .btn-full {
-    @apply w-full;
+    @apply py-3 px-5 bg-transparent border-blue-500 border-2 rounded-lg font-semibold;
   }
   .navbar__item {
-    @apply text-white;
+    @apply text-black;
   }
-  .hero__bg {
-    @apply bg-auto bg-no-repeat bg-center bg-cover bg-hero;
+  .posts__heading {
+    @apply text-5xl font-bold font-primary;
   }
-  .post__highlight {
-    @apply flex items-center;
+  .posts__sub {
+    @apply mt-5 block font-primary font-semibold text-lg text-neutral-400;
   }
-  .post__content {
-    @apply w-5/6 ml-20 mr-24;
+  .cards {
+    @apply mt-16 grid grid-cols-3 gap-x-6 gap-y-16;
   }
-  .post__title {
-    @apply font-primary font-bold text-5xl mb-8;
+  .card {
+    @apply bg-white rounded-[30px] overflow-hidden;
   }
-  .post__desc {
-    @apply font-primary font-semibold text-lg block leading-normal mb-12;
+  .card__img {
+    @apply w-full;
+  }
+  .card__body {
+    @apply ml-8;
+  }
+  .card__title {
+    @apply my-6 text-xl font-card-title;
+  }
+  .card__sub {
+    @apply text-sm font-primary;
+  }
+  .card__author {
+    @apply flex items-center mb-6 ml-6 mt-20 gap-5;
+  }
+  .card__author-name {
+    @apply text-neutral-400 font-primary font-semibold text-xs
+    relative;
+  }
+  .card__author-name::after {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 2px;
+    background: #ccc;
+    right: -12px;
+    top: 0;
+  }
+  .card__avatar {
+    @apply rounded-full w-11 h-11 overflow-hidden;
+  }
+  .card__datetime {
+    @apply text-neutral-400 font-primary font-semibold text-xs;
   }
 }

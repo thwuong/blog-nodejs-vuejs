@@ -6,7 +6,6 @@ export const usePostStore = defineStore("post", {
     return {
       posts: [],
       post: {},
-      postHighlight: [],
     };
   },
   actions: {
@@ -44,7 +43,7 @@ export const usePostStore = defineStore("post", {
       }
     },
     // find post
-    async findPosts() {
+    async fetchPosts() {
       try {
         const response = await PostService.getPosts();
         if (response.data.success) {

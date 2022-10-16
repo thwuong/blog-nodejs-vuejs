@@ -2,7 +2,7 @@
 const islogged = false;
 </script>
 <template>
-  <div class="navbar mx-auto py-4">
+  <div class="navbar mx-auto mt-7">
     <div class="container">
       <div class="flex justify-between items-center">
         <div class="navbar__logo">
@@ -15,7 +15,7 @@ const islogged = false;
             <router-link to="/posts">Posts</router-link>
           </li>
           <li class="navbar__item hover:text-blue-500">
-            <router-link to="/products">Services</router-link>
+            <router-link to="/products">Categories</router-link>
           </li>
           <li class="navbar__item hover:text-blue-500">
             <router-link to="/products">Contact</router-link>
