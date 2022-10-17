@@ -1,10 +1,11 @@
 // models
 const Post = require("../models/postModel");
 const fs = require("fs");
+const cloudinary = require("../utils/cloudinary");
 class PostController {
   async createPost(req, res) {
     const { title, body, tags } = req.body;
-    const image = req.file?.filename;
+    const image = req.file;
 
     if (!title) {
       return res.status(400).json({
@@ -14,11 +15,15 @@ class PostController {
     }
 
     try {
+      let pathImage = "";
+      if (image) {
+        pathImage = await cloudinary.uploader.upload(image.path);
+      }
       const newPost = new Post({
         author: req.userId,
         title,
         body,
-        image: image || "",
+        image: pathImage.secure_url || pathImage,
         tags,
       });
 
@@ -87,19 +92,15 @@ class PostController {
   }
   async removePost(req, res) {
     const condition = { _id: req.params.postId, author: req.userId };
-    const fileImage = await Post.findOne({ _id: req.params.id }).select(
-      "image"
-    );
-    const pathFileUpload = `uploads/image/${fileImage.image}`;
+
     try {
-      const postDeleted = await Post.deleteOne(condition);
+      const fileImage = await Post.findOne({ _id: req.params.id }).select(
+        "image"
+      );
       if (fileImage.image) {
-        fs.unlink(pathFileUpload, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
+        await cloudinary.uploader.destroy(fileImage.image);
       }
+      const postDeleted = await Post.deleteOne(condition);
 
       res.status(200).json({
         success: true,
@@ -116,28 +117,28 @@ class PostController {
   async editPost(req, res) {
     const condition = { author: req.userId, _id: req.params.postId };
     const { title, body, tags } = req.body;
-    const image = req.file?.filename;
+    const fileImage = req.file || "";
 
-    if (image) {
-      const fileImage = await Post.findOne(condition).select("image");
-      if (fileImage.image) {
-        const pathfileImage = `uploads/image/${fileImage.image}`;
-        fs.unlink(pathfileImage, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-      }
-    }
-
-    let postUpdate = {
-      title: title,
-      body: body,
-      image,
-      tags: tags,
-    };
     // update blog
     try {
+      let newImage = "";
+      if (fileImage) {
+        const post = await Post.findOne(condition).select("image");
+        if (post.image) {
+          const arrTempt = post.image.split("/");
+          const fileName = arrTempt[arrTempt.length - 1];
+          let publicId = fileName.split(".")[0];
+          await cloudinary.uploader.destroy(publicId);
+        }
+        newImage = await cloudinary.uploader.upload(fileImage.path);
+      }
+      const image = newImage.secure_url;
+      let postUpdate = {
+        title: title,
+        body: body,
+        image,
+        tags: tags,
+      };
       postUpdate = await Blog.findOneAndUpdate(condition, postUpdate, {
         new: true,
       }).populate("author", "username");

@@ -11,7 +11,7 @@ const passport = (req, res, next) => {
   }
 
   try {
-    const decodedToken = jwt.verify(token, process.env.SECRECT);
+    const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
     req.userId = decodedToken.payload;
     next();
   } catch (error) {

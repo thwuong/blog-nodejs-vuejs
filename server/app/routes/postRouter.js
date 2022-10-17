@@ -1,7 +1,7 @@
 const Router = require("express").Router();
 const PostController = require("../controllers/PostController");
-const passport = require("../configs/passport");
-const upload = require("../configs/multer");
+const passport = require("../utils/passport");
+const upload = require("../utils/multer");
 
 Router.post(
   "/newpost",

@@ -2,7 +2,7 @@
 const Auth = require("../models/authModel");
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
+const cloudinary = require("../utils/cloudinary");
 class authController {
   async getUser(req, res, next) {
     try {
@@ -39,7 +39,7 @@ class authController {
       }
       const passwordValid = await argon2.verify(user.password, password);
       if (passwordValid) {
-        const token = jwt.sign({ payload: user._id }, process.env.SECRECT);
+        const token = jwt.sign({ payload: user._id }, process.env.TOKEN_SECRET);
         res.status(200).json({
           success: true,
           message: "Login successfully!",
@@ -89,7 +89,10 @@ class authController {
       });
 
       await newUser.save();
-      const token = jwt.sign({ payload: newUser._id }, process.env.SECRECT);
+      const token = jwt.sign(
+        { payload: newUser._id },
+        process.env.TOKEN_SECRET
+      );
 
       res.status(200).json({
         success: true,
@@ -105,28 +108,27 @@ class authController {
     }
   }
   async updateProfile(req, res) {
-    const filename = req.file?.filename;
+    const file = req.file || "";
     const { username, email } = req.body;
-
     const condition = { _id: req.userId };
 
-    if (filename) {
-      const fileAvatar = await Auth.findById(req.userId).select("avatar");
-      if (fileAvatar.avatar) {
-        const pathFileAvatar = `uploads/avatar/${fileAvatar.avatar}`;
-        fs.unlink(pathFileAvatar, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-      }
-    }
-
     try {
+      let pathFile = "";
+      if (file) {
+        const user = await Auth.findOne(condition).select("avatar");
+        if (user.avatar) {
+          const arrTempt = user.avatar.split("/");
+          const fileName = arrTempt[arrTempt.length - 1];
+          let publicId = fileName.split(".")[0];
+          await cloudinary.uploader.destroy(publicId);
+        }
+        pathFile = await cloudinary.uploader.upload(file.path);
+      }
+      const avatar = pathFile.secure_url;
       let userUpdate = {
         username,
         email,
-        avatar: filename,
+        avatar,
       };
       userUpdate = await Auth.findOneAndUpdate(condition, userUpdate, {
         new: true,
@@ -137,11 +139,11 @@ class authController {
         userUpdate,
       });
     } catch (error) {
+      console.log(error);
       res.status(500).json({
         success: false,
         message: "Internal Server Error!",
       });
-      console.log(error);
     }
   }
 }
