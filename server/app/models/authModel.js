@@ -13,6 +13,8 @@ const authSchema = new Schema(
     },
     avatar: {
       type: String,
+      default:
+        "https://res.cloudinary.com/dmf8jfmss/image/upload/v1666176522/default-avatar-profile-icon-of-social-media-user-vector_rfjmey.jpg",
     },
     email: {
       type: String,

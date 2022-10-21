@@ -12,7 +12,7 @@ class authController {
           .status(400)
           .json({ success: false, message: "User not found" });
       }
-      res.json({ success: true, user });
+      res.json({ success: true, user, message: "getting user successfully!" });
     } catch (error) {
       console.log(error);
       res
@@ -39,7 +39,11 @@ class authController {
       }
       const passwordValid = await argon2.verify(user.password, password);
       if (passwordValid) {
-        const token = jwt.sign({ payload: user._id }, process.env.TOKEN_SECRET);
+        const token = jwt.sign(
+          { payload: user._id },
+          process.env.TOKEN_SECRET,
+          { expiresIn: "12h" }
+        );
         res.status(200).json({
           success: true,
           message: "Login successfully!",
@@ -91,7 +95,8 @@ class authController {
       await newUser.save();
       const token = jwt.sign(
         { payload: newUser._id },
-        process.env.TOKEN_SECRET
+        process.env.TOKEN_SECRET,
+        { expiresIn: "12h" }
       );
 
       res.status(200).json({

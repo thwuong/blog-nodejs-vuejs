@@ -1,6 +1,5 @@
 // models
 const Post = require("../models/postModel");
-const fs = require("fs");
 const cloudinary = require("../utils/cloudinary");
 class PostController {
   async createPost(req, res) {

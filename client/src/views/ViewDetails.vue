@@ -1,9 +1,17 @@
-<template lang="">
+<script>
+import NavbarTopComponent from "@/components/NavbarTopComponent.vue";
+
+export default {
+  components: { NavbarTopComponent },
+  setup() {
+    return {};
+  },
+};
+</script>
+<template>
+  <navbar-top-component :itemActive="'contact'" />
   <div>
     {{ $route.params.id }}
   </div>
 </template>
-<script>
-export default {};
-</script>
-<style lang=""></style>
+<style></style>
