@@ -1,28 +1,26 @@
 <script>
-import CardComponent from "@/components/CardComponent.vue";
-import NavbarTopComponent from "@/components/NavbarTopComponent.vue";
+import Card from "@/components/Card.vue";
+import NavbarTop from "@/components/NavbarTop.vue";
 import { usePostStore } from "@/stores/usePostStore.js";
 import { useAuthStore } from "@/stores/useAuthStore.js";
 import { storeToRefs } from "pinia";
 export default {
   components: {
-    CardComponent,
-    NavbarTopComponent,
-  },
-  computed: {},
-  created() {
-    const { fetchPosts } = usePostStore();
-    const { loggedIn } = storeToRefs(useAuthStore());
-    const { getProfile } = useAuthStore();
-    fetchPosts();
-    if (loggedIn) {
-      getProfile();
-    }
+    Card,
+    NavbarTop,
   },
   setup() {
     const { posts } = storeToRefs(usePostStore());
-    const { userCurrent } = storeToRefs(useAuthStore());
-
+    const { loggedIn, userCurrent } = storeToRefs(useAuthStore());
+    const { fetchPosts } = usePostStore();
+    const { getProfile } = useAuthStore();
+    const checkLogged = () => {
+      if (loggedIn.value) {
+        getProfile();
+      }
+    };
+    fetchPosts();
+    checkLogged();
     return {
       posts,
       userCurrent,
@@ -31,7 +29,7 @@ export default {
 };
 </script>
 <template>
-  <navbar-top-component
+  <navbar-top
     :itemActive="'posts'"
     :username="userCurrent.username"
     :avatar="userCurrent.avatar"
@@ -45,12 +43,12 @@ export default {
         </span>
         <div class="cards">
           <router-link v-for="post in posts" :to="`/posts/${post._id}`">
-            <card-component
+            <card
               :title="post.title"
               :description="post.description"
               :image="post.image"
               :author="post.author.username"
-              :avatar="post.avatar"
+              :avatar="post.author.avatar"
               :dateTime="post.createdAt"
             />
           </router-link>

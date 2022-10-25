@@ -1,7 +1,7 @@
 <script>
-import NavbarTopComponent from "@/components/NavbarTopComponent.vue";
+import NavbarTop from "@/components/NavbarTop.vue";
 import * as yup from "yup";
-import { Form as VeeForm, Field, ErrorMessage } from "vee-validate";
+import { Form, Field, ErrorMessage } from "vee-validate";
 import { useAuthStore } from "@/stores/useAuthStore.js";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
@@ -16,7 +16,7 @@ const schemaSignup = yup.object({
     .oneOf([yup.ref("password")], "Password's not match"),
 });
 export default {
-  components: { VeeForm, Field, ErrorMessage, NavbarTopComponent },
+  components: { Form, Field, ErrorMessage, NavbarTop },
   setup() {
     const router = useRouter();
 
@@ -49,7 +49,7 @@ export default {
 };
 </script>
 <template>
-  <navbar-top-component :itemActive="'register'" />
+  <navbar-top :itemActive="'register'" />
   <div class="auth mt-20">
     <div class="container">
       <div class="auth__container">
@@ -59,12 +59,12 @@ export default {
             Please Sign up to your account to Continue with App.</span
           >
         </div>
-        <VeeForm
+        <Form
           v-slot="{ handleSubmit }"
           :validation-schema="schemaSignup"
           as="div"
         >
-          <form class="form" @submit="handleSubmit($event, register)">
+          <form class="form__auth" @submit="handleSubmit($event, register)">
             <div class="form__control">
               <label for="input-username" class="form__label">Username</label>
               <Field
@@ -109,7 +109,7 @@ export default {
               >
             </span>
           </form>
-        </VeeForm>
+        </Form>
       </div>
     </div>
   </div>

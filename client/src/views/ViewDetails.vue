@@ -1,15 +1,15 @@
 <script>
-import NavbarTopComponent from "@/components/NavbarTopComponent.vue";
+import NavbarTop from "@/components/NavbarTop.vue";
 
 export default {
-  components: { NavbarTopComponent },
+  components: { NavbarTop },
   setup() {
     return {};
   },
 };
 </script>
 <template>
-  <navbar-top-component :itemActive="'contact'" />
+  <navbar-top :itemActive="'contact'" />
   <div>
     {{ $route.params.id }}
   </div>

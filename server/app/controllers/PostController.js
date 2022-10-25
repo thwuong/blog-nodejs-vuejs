@@ -3,7 +3,7 @@ const Post = require("../models/postModel");
 const cloudinary = require("../utils/cloudinary");
 class PostController {
   async createPost(req, res) {
-    const { title, body, tags } = req.body;
+    const { title, body, tags, description } = req.body;
     const image = req.file;
 
     if (!title) {
@@ -21,6 +21,7 @@ class PostController {
       const newPost = new Post({
         author: req.userId,
         title,
+        description,
         body,
         image: pathImage.secure_url || pathImage,
         tags,
@@ -33,6 +34,7 @@ class PostController {
         message: "Created new Post",
       });
     } catch (error) {
+      console.log(error);
       res.status(500).json({
         success: false,
         message: error.message || "Internal Server Error!",
@@ -56,7 +58,8 @@ class PostController {
     try {
       const posts = await Post.find(regex)
         .where(filter)
-        .populate("author", "username");
+        .populate("author", "username")
+        .populate("author", "avatar");
       res.status(200).json({
         success: true,
         message: "get posts successfully!",
@@ -115,7 +118,7 @@ class PostController {
   }
   async editPost(req, res) {
     const condition = { author: req.userId, _id: req.params.postId };
-    const { title, body, tags } = req.body;
+    const { title, body, tags, description } = req.body;
     const fileImage = req.file || "";
 
     // update blog
@@ -135,6 +138,7 @@ class PostController {
       let postUpdate = {
         title: title,
         body: body,
+        description: description,
         image,
         tags: tags,
       };

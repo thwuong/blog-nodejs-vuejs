@@ -13,6 +13,7 @@ export const usePostStore = defineStore("post", {
     async createPost(payload) {
       try {
         const response = await PostService.createPost(payload);
+        console.log(response);
         if (response.data.success) {
           return response.data;
         }

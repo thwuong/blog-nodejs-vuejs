@@ -1,6 +1,6 @@
 <script>
-import NavbarTopComponent from "@/components/NavbarTopComponent.vue";
-import { Form as VeeForm, Field, ErrorMessage } from "vee-validate";
+import NavbarTop from "@/components/NavbarTop.vue";
+import { Form, Field, ErrorMessage } from "vee-validate";
 import { useAuthStore } from "@/stores/useAuthStore.js";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
@@ -11,7 +11,7 @@ const schemaSignin = yup.object({
   password: yup.string().required().min(8),
 });
 export default {
-  components: { VeeForm, Field, ErrorMessage, NavbarTopComponent },
+  components: { Form, Field, ErrorMessage, NavbarTop },
   setup() {
     const router = useRouter();
     return {
@@ -44,7 +44,7 @@ export default {
 };
 </script>
 <template lang="">
-  <navbar-top-component :itemActive="'login'" />
+  <navbar-top :itemActive="'login'" />
   <div class="auth mt-20">
     <div class="container">
       <div class="auth__container">
@@ -54,12 +54,12 @@ export default {
             Please Sign in to your account to Continue with App.
           </span>
         </div>
-        <VeeForm
+        <Form
           v-slot="{ handleSubmit }"
           :validation-schema="schemaSignin"
           as="div"
         >
-          <form class="form" @submit="handleSubmit($event, login)">
+          <form class="form__auth" @submit="handleSubmit($event, login)">
             <div class="form__control">
               <label for="input-username" class="form__label">Username</label>
               <Field
@@ -93,7 +93,7 @@ export default {
               >
             </span>
           </form>
-        </VeeForm>
+        </Form>
       </div>
     </div>
   </div>

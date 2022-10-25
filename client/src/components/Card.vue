@@ -27,21 +27,21 @@ export default {
 <template>
   <div class="card">
     <div class="card__img">
-      <img :src="image" alt="" class="card__img-src" />
+      <img :src="props.image" :alt="props.title" class="card__img-src" />
     </div>
     <div class="card__body">
-      <h2 class="card__title">{{ title }}</h2>
+      <h2 class="card__title">{{ props.title }}</h2>
       <span class="card__sub">
-        {{ description }}
+        {{ props.description }}
       </span>
     </div>
     <div class="card__author">
       <div class="card__avatar">
-        <img :src="author" alt="" />
+        <img :src="props.avatar" :alt="props.author" />
       </div>
-      <span class="card__author-name">{{ author }}</span>
+      <span class="card__author-name">{{ props.author }}</span>
       <span class="card__datetime">{{
-        new Date(dateTime).toLocaleDateString("en-US", options)
+        new Date(props.dateTime).toLocaleDateString("en-US", options)
       }}</span>
     </div>
   </div>

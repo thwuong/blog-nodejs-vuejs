@@ -54,7 +54,7 @@
     @apply text-sm font-primary;
   }
   .card__author {
-    @apply flex items-center mb-6 ml-6 mt-20 gap-5;
+    @apply flex items-center my-6 ml-6 gap-5;
   }
   .card__author-name {
     @apply text-neutral-400 font-primary font-semibold text-xs
@@ -86,14 +86,14 @@
   .auth__sub {
     @apply text-sm text-neutral-400 font-primary;
   }
-  .form {
+  .form__auth {
     @apply w-2/5 bg-blue-400/50 mt-8 mx-auto p-8 rounded-lg;
   }
   .form__control {
     @apply mt-4;
   }
   .form__label {
-    @apply text-sm font-primary block text-white mb-2;
+    @apply text-base font-primary block text-white mb-2;
   }
   .form__input {
     @apply px-4 py-2 rounded-lg block w-full mb-4;
@@ -103,5 +103,14 @@
   }
   .form__transition {
     @apply text-orange-500 cursor-pointer;
+  }
+  .form__post .form__label {
+    @apply text-black;
+  }
+  .form__post .form__input {
+    @apply border-blue-500 border-[1px];
+  }
+  .form__select {
+    @apply flex justify-between;
   }
 }
