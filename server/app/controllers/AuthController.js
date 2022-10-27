@@ -98,7 +98,6 @@ class authController {
         process.env.TOKEN_SECRET,
         { expiresIn: "12h" }
       );
-
       res.status(200).json({
         success: true,
         message: "Username created successfully!",

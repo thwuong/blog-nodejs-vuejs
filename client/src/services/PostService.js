@@ -15,7 +15,7 @@ class PostService {
   async getPost(id) {
     return await this.http.get(`/${id}`);
   }
-  async editPost(payload, id) {
+  async editPost(id, payload) {
     return await this.http.put(`/${id}/edit`, payload, {
       headers: authHeader(),
     });

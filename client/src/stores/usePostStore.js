@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import PostService from "@/services/PostService";
+import { useAuthStore } from "@/stores/useAuthStore.js";
+import { storeToRefs } from "pinia";
 
 export const usePostStore = defineStore("post", {
   state: () => {
@@ -7,6 +9,17 @@ export const usePostStore = defineStore("post", {
       posts: [],
       post: {},
     };
+  },
+  getters: {
+    getPostOfCurrentUser() {
+      const { userCurrent } = storeToRefs(useAuthStore());
+      return this.posts.filter(
+        (post) => post.author._id === userCurrent.value._id
+      );
+    },
+    getPostById() {
+      return this.post;
+    },
   },
   actions: {
     // create post
@@ -18,7 +31,7 @@ export const usePostStore = defineStore("post", {
           return response.data;
         }
       } catch (error) {
-        return response.success.message || error.message;
+        return error.response.data.message || error.message;
       }
     },
     // delete post
@@ -29,7 +42,7 @@ export const usePostStore = defineStore("post", {
           return response.data;
         }
       } catch (error) {
-        return response.success.message || error.message;
+        return error.response.data.message || error.message;
       }
     },
     // edit post
@@ -40,7 +53,7 @@ export const usePostStore = defineStore("post", {
           return response.data;
         }
       } catch (error) {
-        return response.success.message || error.message;
+        return error.response.data.message || error.message;
       }
     },
     // find post
@@ -48,11 +61,11 @@ export const usePostStore = defineStore("post", {
       try {
         const response = await PostService.getPosts();
         if (response.data.success) {
-          this.$patch({ posts: response.data.posts });
+          this.posts = response.data.posts;
           return response.data;
         }
       } catch (error) {
-        return response.success.message || error.message;
+        return error.response.data.message || error.message;
       }
     },
     // findOne
@@ -60,11 +73,11 @@ export const usePostStore = defineStore("post", {
       try {
         const response = await PostService.getPost(id);
         if (response.data.success) {
-          this.$patch({ post: response.data.post });
+          this.post = response.data.post;
           return response.data;
         }
       } catch (error) {
-        return response.success.message || error.message;
+        return error.response.data.message || error.message;
       }
     },
     // likes
@@ -75,7 +88,7 @@ export const usePostStore = defineStore("post", {
           return response.data;
         }
       } catch (error) {
-        return response.success.message || error.message;
+        return error.response.data.message || error.message;
       }
     },
     // fovs handlerFavorite
@@ -86,7 +99,7 @@ export const usePostStore = defineStore("post", {
           return response.data;
         }
       } catch (error) {
-        return response.success.message || error.message;
+        return error.response.data.message || error.message;
       }
     },
   },

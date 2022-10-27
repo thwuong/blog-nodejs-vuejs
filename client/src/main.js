@@ -8,10 +8,27 @@ import "../src/style.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 /* import specific icons */
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { faCaretUp } from "@fortawesome/free-solid-svg-icons";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-library.add(faArrowRight, faCaretUp, faHeart);
+import {
+  faArrowRight,
+  faPen,
+  faCaretUp,
+  faTrash,
+  faUser,
+  faLock,
+  faHeart,
+  faArrowsLeftRightToLine,
+} from "@fortawesome/free-solid-svg-icons";
+
+library.add(
+  faArrowRight,
+  faCaretUp,
+  faHeart,
+  faPen,
+  faTrash,
+  faUser,
+  faLock,
+  faArrowsLeftRightToLine
+);
 
 const app = createApp(App);
 

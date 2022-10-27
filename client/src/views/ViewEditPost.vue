@@ -4,35 +4,41 @@ import NavbarTop from "@/components/NavbarTop.vue";
 import { useAuthStore } from "@/stores/useAuthStore.js";
 import { usePostStore } from "@/stores/usePostStore.js";
 import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 export default {
   components: { FormPost, NavbarTop },
   setup(props, context) {
     const router = useRouter();
+    const route = useRoute();
+
     const { loggedIn, userCurrent } = storeToRefs(useAuthStore());
     const { getProfile } = useAuthStore();
-    const { createPost } = usePostStore();
-    const checkLogged = () => {
+    const { post } = storeToRefs(usePostStore());
+    const { editPost, findPost } = usePostStore();
+
+    const postId = route.params.id;
+    const checkLogged = async () => {
       if (!loggedIn.value) {
         router.push("/posts");
       }
-      getProfile();
+      await findPost(postId);
+      await getProfile();
     };
-    checkLogged();
-
-    const createNewPost = async (newPost) => {
-      newPost.append("author", userCurrent.value._id);
-      const { success, message } = await createPost(newPost);
-
+    const handleEditPost = async (postUpdate) => {
+      postUpdate.append("author", userCurrent.value._id);
+      const { success, message } = await editPost(postId, postUpdate);
       if (success) {
-        router.push("/posts");
+        alert(message);
+        router.push("/auth/profile");
       } else {
         alert(message);
       }
     };
+
+    checkLogged();
     return {
-      userCurrent,
-      createNewPost,
+      handleEditPost,
+      post,
     };
   },
 };
@@ -41,8 +47,12 @@ export default {
   <navbar-top :itemActive="'posts'" />
   <div class="form__create">
     <div class="container">
-      <h1 class="form__heading">Create New Post</h1>
-      <FormPost @create-post="createNewPost" />
+      <h1 class="form__heading">Edit Post</h1>
+      <FormPost
+        @edit-post="handleEditPost"
+        :postSelected="post"
+        :isEdit="true"
+      />
     </div>
   </div>
 </template>

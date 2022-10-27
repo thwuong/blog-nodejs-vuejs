@@ -45,7 +45,6 @@ export const useAuthStore = defineStore("auth", {
         );
         if (response.data.success) {
           this.loggedIn = response.data.success;
-          // this.userCurrent = response.data.token;
           return response.data;
         }
       } catch (error) {
@@ -75,7 +74,8 @@ export const useAuthStore = defineStore("auth", {
     },
     logout() {
       localStorage.removeItem("user");
-      this.$patch({ userCurrent: {}, loggedIn: !this.loggedIn });
+      this.userCurrent = {};
+      this.loggedIn = !this.loggedIn;
     },
   },
 });

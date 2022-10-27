@@ -58,8 +58,8 @@ class PostController {
     try {
       const posts = await Post.find(regex)
         .where(filter)
-        .populate("author", "username")
-        .populate("author", "avatar");
+        .populate("author", "-password");
+
       res.status(200).json({
         success: true,
         message: "get posts successfully!",
@@ -78,11 +78,22 @@ class PostController {
     const condition = { _id: req.params.postId };
 
     try {
-      const post = await Post.findOne(condition).populate("author", "username");
+      const post = await Post.findOne(condition).populate(
+        "author",
+        "-password"
+      );
+
+      if (!post) {
+        return res.status(404).json({
+          success: false,
+          message: "post not found",
+          post,
+        });
+      }
 
       res.status(200).json({
         success: true,
-        message: "get blog successfully!",
+        message: "get post successfully!",
         post,
       });
     } catch (error) {
@@ -96,9 +107,10 @@ class PostController {
     const condition = { _id: req.params.postId, author: req.userId };
 
     try {
-      const fileImage = await Post.findOne({ _id: req.params.id }).select(
+      const fileImage = await Post.findOne({ _id: req.params.postId }).select(
         "image"
       );
+
       if (fileImage.image) {
         await cloudinary.uploader.destroy(fileImage.image);
       }
@@ -106,10 +118,11 @@ class PostController {
 
       res.status(200).json({
         success: true,
-        message: "Deleted blog successfully!",
+        message: "Deleted post successfully!",
         postDeleted,
       });
     } catch (error) {
+      console.log(error);
       res.status(500).json({
         success: false,
         message: "Internal Server Error!",
@@ -121,7 +134,7 @@ class PostController {
     const { title, body, tags, description } = req.body;
     const fileImage = req.file || "";
 
-    // update blog
+    // update post
     try {
       let newImage = "";
       if (fileImage) {
@@ -142,16 +155,17 @@ class PostController {
         image,
         tags: tags,
       };
-      postUpdate = await Blog.findOneAndUpdate(condition, postUpdate, {
+      postUpdate = await Post.findOneAndUpdate(condition, postUpdate, {
         new: true,
       }).populate("author", "username");
 
       res.status(202).json({
         success: true,
-        message: "Blog edited successfully!",
+        message: "Post edited successfully!",
         postUpdate,
       });
     } catch (error) {
+      console.log(error);
       res.status(500).json({
         success: false,
         message: "Internal Server Error",
@@ -165,11 +179,11 @@ class PostController {
     const userId = req.userId;
 
     try {
-      const posts = await Blog.findOne(condition).select("votes");
+      const posts = await Post.findOne(condition).select("votes");
       const check = [...posts.votes].some((vote) => vote.toString() === userId);
       let postUpdate = {};
       if (check) {
-        postUpdate = await Blog.findByIdAndUpdate(
+        postUpdate = await Post.findByIdAndUpdate(
           condition,
           {
             $pull: { votes: userId },
@@ -177,7 +191,7 @@ class PostController {
           { new: true }
         );
       } else {
-        postUpdate = await Blog.findByIdAndUpdate(
+        postUpdate = await Post.findByIdAndUpdate(
           condition,
           {
             $push: { votes: userId },
@@ -199,17 +213,17 @@ class PostController {
     }
   }
   async handleFavsPost(req, res) {
-    // get id user like and blog is liking
+    // get id user like and post is liking
     // check user exsting likes if those user in likes remove user or revese
-    const condition = { _id: req.params.blogId };
+    const condition = { _id: req.params.postId };
     const userId = req.userId;
 
     try {
-      const posts = await Blog.findOne(condition).select("votes");
+      const posts = await Post.findOne(condition).select("votes");
       const check = [...posts.votes].some((vote) => vote.toString() === userId);
       let postUpdate = {};
       if (check) {
-        postUpdate = await Blog.findByIdAndUpdate(
+        postUpdate = await Post.findByIdAndUpdate(
           condition,
           {
             $pull: { favs: userId },
@@ -217,7 +231,7 @@ class PostController {
           { new: true }
         );
       } else {
-        postUpdate = await Blog.findByIdAndUpdate(
+        postUpdate = await Post.findByIdAndUpdate(
           condition,
           {
             $push: { favs: userId },

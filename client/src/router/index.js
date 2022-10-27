@@ -3,6 +3,7 @@ import NotFound from "@/views/NotFound.vue";
 import ViewProfile from "@/views/ViewProfile.vue";
 import ViewPosts from "@/views/ViewPosts.vue";
 import ViewCreatePost from "@/views/ViewCreatePost.vue";
+import ViewEditPost from "@/views/ViewEditPost.vue";
 import ViewLogin from "@/views/ViewLogin.vue";
 import ViewRegister from "@/views/ViewRegister.vue";
 import ViewDetail from "@/views/ViewDetails.vue";
@@ -19,7 +20,8 @@ const router = createRouter({
       component: ViewCreatePost,
       name: "ViewCreatePost",
     },
-    { path: "/posts/:id", component: ViewDetail, name: "ViewDetail" },
+    { path: "/post/:id", component: ViewDetail, name: "ViewDetail" },
+    { path: "/post/:id/edit", component: ViewEditPost, name: "ViewEditPost" },
     { path: "/:pathMatch(.*)*", component: NotFound, name: "NotFound" },
   ],
 });

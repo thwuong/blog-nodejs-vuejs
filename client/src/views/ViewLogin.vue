@@ -14,32 +14,30 @@ export default {
   components: { Form, Field, ErrorMessage, NavbarTop },
   setup() {
     const router = useRouter();
-    return {
-      schemaSignin,
-      router,
+    const { login } = useAuthStore();
+    const checkLogged = () => {
+      const { loggedIn } = storeToRefs(useAuthStore());
+      if (loggedIn.value) {
+        router.push("/posts");
+      }
     };
-  },
-  created() {
-    const { loggedIn } = storeToRefs(useAuthStore());
-    if (loggedIn.value) {
-      this.router.push("/posts");
-    }
-  },
-
-  methods: {
-    async login(values) {
-      const { login } = useAuthStore();
-
+    checkLogged();
+    const handleLogin = async (values) => {
       const { success, message } = await login({
         username: values.username,
         password: values.password,
       });
       if (success) {
-        this.router.push("/posts");
+        router.push("/posts");
       } else {
         alert(message);
       }
-    },
+    };
+    return {
+      schemaSignin,
+      router,
+      handleLogin,
+    };
   },
 };
 </script>
@@ -59,8 +57,8 @@ export default {
           :validation-schema="schemaSignin"
           as="div"
         >
-          <form class="form__auth" @submit="handleSubmit($event, login)">
-            <div class="form__control">
+          <form class="form__auth" @submit="handleSubmit($event, handleLogin)">
+            <div class="form__group">
               <label for="input-username" class="form__label">Username</label>
               <Field
                 type="text"
@@ -72,7 +70,7 @@ export default {
               />
               <ErrorMessage name="username" class="text-rose-400" />
             </div>
-            <div class="form__control">
+            <div class="form__group">
               <label for="input-password" class="form__label">Password</label>
               <Field
                 type="password"
@@ -84,7 +82,7 @@ export default {
               <ErrorMessage name="password" class="text-rose-400" />
             </div>
 
-            <button class="btn-primary btn-full mt-2">Sign In</button>
+            <button class="btn btn-primary btn-full mt-2">Sign In</button>
 
             <span class="form__desc">
               Don't have an account?

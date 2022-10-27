@@ -6,28 +6,31 @@ import { useRouter } from "vue-router";
 export default {
   props: {
     itemActive: String,
-    username: String,
-    avatar: String,
   },
   setup(props) {
     const classActive = ref("text-orange-400");
-    const { loggedIn } = storeToRefs(useAuthStore());
     const showDropdown = ref(false);
     const router = useRouter();
+    const { loggedIn, userCurrent } = storeToRefs(useAuthStore());
+    const { logout, getProfile } = useAuthStore();
+    const checkLogged = async () => {
+      if (loggedIn.value) {
+        await getProfile();
+      }
+    };
+    checkLogged();
+    const handleLogout = () => {
+      logout();
+      router.push("/posts");
+    };
     return {
       props,
       classActive,
       loggedIn,
       showDropdown,
-      router,
+      handleLogout,
+      userCurrent,
     };
-  },
-  methods: {
-    handleLogout() {
-      const { logout } = useAuthStore();
-      logout();
-      this.router.push("/posts");
-    },
   },
 };
 </script>
@@ -45,7 +48,7 @@ export default {
             :class="[
               props.itemActive == 'posts' ? classActive : '',
               'navbar__item',
-              'hover:text-blue-500',
+              'hover:text-orange-400',
             ]"
           >
             <router-link to="/posts">Posts</router-link>
@@ -54,7 +57,7 @@ export default {
             :class="[
               props.itemActive == 'categories' ? classActive : '',
               'navbar__item',
-              'hover:text-blue-500',
+              'hover:text-orange-400',
             ]"
           >
             <router-link to="/products">Categories</router-link>
@@ -63,7 +66,7 @@ export default {
             :class="[
               props.itemActive == 'contact' ? classActive : '',
               'navbar__item',
-              'hover:text-blue-500',
+              'hover:text-orange-400',
             ]"
           >
             <router-link to="/products">Contact</router-link>
@@ -72,8 +75,8 @@ export default {
             <router-link to="/auth/login"
               ><span
                 :class="[
-                  'btn-primary',
-                  props.itemActive == 'login' ? classActive : '',
+                  'btn btn-primary',
+                  props.itemActive == 'login' ? 'bg-orange-400' : '',
                 ]"
                 >Login</span
               ></router-link
@@ -81,7 +84,7 @@ export default {
             <router-link to="/auth/register"
               ><span
                 :class="[
-                  'btn-secondary',
+                  'btn btn-secondary',
                   props.itemActive == 'register' ? classActive : '',
                 ]"
                 >Register</span
@@ -91,17 +94,15 @@ export default {
           <li class="navbar__item" v-if="loggedIn">
             <div class="navbar__profile">
               <div class="navbar__avatar">
-                <img :src="props.avatar" :alt="props.username" />
+                <img :src="userCurrent.avatar" :alt="userCurrent.username" />
               </div>
-              <span class="navbar__auth">{{ props.username }}</span>
+              <span class="navbar__auth">{{ userCurrent.username }}</span>
               <span class="dropdown relative">
                 <font-awesome-icon
                   icon="fa-solid fa-caret-up"
                   @click="showDropdown = !showDropdown"
                   :class="[
-                    'w-6',
-                    'h-12',
-                    'cursor-pointer',
+                    'w-6 h-6 cursor-pointer',
                     showDropdown
                       ? ' ease-out duration-300 rotate-180'
                       : 'ease-out duration-300 rotate-360',
@@ -113,8 +114,12 @@ export default {
                 >
                   <li
                     class="dropdown__item py-2 px-4 hover:text-orange-400 cursor-pointer"
+                    :class="[
+                      props.itemActive == 'profile' ? classActive : '',
+                      'dropdown__item py-2 px-4 cursor-pointer',
+                    ]"
                   >
-                    <router-link to="/auth/profile">Update Profile</router-link>
+                    <router-link to="/auth/profile"> Profile</router-link>
                   </li>
                   <li
                     class="dropdown__item py-2 px-4 hover:text-orange-400 cursor-pointer"
