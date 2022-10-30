@@ -9,8 +9,8 @@ class PostService {
   async createPost(payload) {
     return await this.http.post("/newpost", payload, { headers: authHeader() });
   }
-  async getPosts() {
-    return await this.http.get("/");
+  async getPosts(keyword) {
+    return await this.http.get(`/?keyword=${keyword}`);
   }
   async getPost(id) {
     return await this.http.get(`/${id}`);

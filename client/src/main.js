@@ -17,6 +17,8 @@ import {
   faLock,
   faHeart,
   faArrowsLeftRightToLine,
+  faMagnifyingGlass,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -27,7 +29,9 @@ library.add(
   faTrash,
   faUser,
   faLock,
-  faArrowsLeftRightToLine
+  faArrowsLeftRightToLine,
+  faMagnifyingGlass,
+  faXmark
 );
 
 const app = createApp(App);

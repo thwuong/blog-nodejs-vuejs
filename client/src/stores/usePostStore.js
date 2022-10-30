@@ -57,9 +57,10 @@ export const usePostStore = defineStore("post", {
       }
     },
     // find post
-    async fetchPosts() {
+    async fetchPosts(value) {
+      const keyword = value || "";
       try {
-        const response = await PostService.getPosts();
+        const response = await PostService.getPosts(keyword);
         if (response.data.success) {
           this.posts = response.data.posts;
           return response.data;
