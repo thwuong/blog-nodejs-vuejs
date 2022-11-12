@@ -36,7 +36,7 @@
     @apply w-[28px] h-[28px] rounded-full overflow-hidden;
   }
   .posts {
-    @apply w-[1024px] mx-auto;
+    @apply w-[1024px] mx-auto mb-[90px];
   }
   .posts__intro {
     @apply mt-20 flex items-end justify-between;
@@ -57,7 +57,7 @@
     @apply mt-16 grid grid-cols-3 gap-x-6 gap-y-16;
   }
   .card {
-    @apply bg-gray-400/25 rounded-lg overflow-hidden ease-out duration-300 hover:bg-gray-400/50;
+    @apply bg-gray-400/50 rounded-lg overflow-hidden ease-out duration-300 hover:bg-gray-400/25;
   }
   .card__img {
     @apply w-full h-40 overflow-hidden;
@@ -97,13 +97,22 @@
     @apply ml-4 my-3;
   }
   .card-control__item {
-    @apply mr-4 px-3 py-2 rounded-full cursor-pointer text-sm font-link text-white bg-blue-400;
+    @apply mr-4 px-3 py-2 rounded-full cursor-pointer text-sm font-link text-white;
   }
   .card-control__item-edit {
     @apply bg-yellow-400;
   }
   .card-control__item-remove {
     @apply bg-rose-400;
+  }
+  .card__state {
+    @apply p-0 text-xl drop-shadow-2xl;
+  }
+  .card__state-fav.active {
+    @apply text-rose-500;
+  }
+  .card__state-like.active {
+    @apply text-blue-500;
   }
   /* FormAuth */
   .auth__signup,
@@ -178,7 +187,7 @@
     @apply text-neutral-400 font-primary font-semibold text-sm;
   }
   .post__image {
-    @apply my-12 w-5/6 mx-auto;
+    @apply my-12 w-1/2 mx-auto;
   }
   .post__body {
     @apply text-base w-8/12 mx-auto text-left font-primary leading-normal;
@@ -207,7 +216,7 @@
     @apply mt-8 flex items-center gap-2;
   }
   .filter__item {
-    @apply text-base font-bold btn btn-secondary;
+    @apply text-base font-bold btn btn-secondary cursor-pointer ease-in duration-300;
   }
   .filter__item.active {
     @apply bg-orange-400 text-white border-none;

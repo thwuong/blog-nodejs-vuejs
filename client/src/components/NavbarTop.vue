@@ -1,7 +1,7 @@
 <script>
 import { useAuthStore } from "@/stores/useAuthStore.js";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 export default {
   props: {
@@ -18,11 +18,13 @@ export default {
         await getProfile();
       }
     };
-    checkLogged();
     const handleLogout = () => {
       logout();
       router.push("/posts");
     };
+    onMounted(() => {
+      checkLogged();
+    });
     return {
       props,
       classActive,

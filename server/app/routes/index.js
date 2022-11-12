@@ -1,6 +1,7 @@
 const authRouter = require("./authRouter");
 const postRouter = require("./postRouter");
 const commentRouter = require("./commentRouter");
+const jwt = require("jsonwebtoken");
 
 module.exports = (app) => {
   app.use("/api/auth", authRouter);

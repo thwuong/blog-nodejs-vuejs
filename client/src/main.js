@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+// import CKEditor from "@ckeditor/ckeditor5-vue";
 
 import App from "./App.vue";
 import router from "./router";
@@ -7,6 +8,7 @@ import "../src/style.css";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 /* import specific icons */
 import {
   faArrowRight,
@@ -19,6 +21,7 @@ import {
   faArrowsLeftRightToLine,
   faMagnifyingGlass,
   faXmark,
+  faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -31,7 +34,8 @@ library.add(
   faLock,
   faArrowsLeftRightToLine,
   faMagnifyingGlass,
-  faXmark
+  faXmark,
+  faThumbsUp
 );
 
 const app = createApp(App);

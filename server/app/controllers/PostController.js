@@ -1,6 +1,7 @@
 // models
 const Post = require("../models/postModel");
 const cloudinary = require("../utils/cloudinary");
+
 class PostController {
   async createPost(req, res) {
     const { title, body, tags, description } = req.body;
@@ -87,10 +88,8 @@ class PostController {
         return res.status(404).json({
           success: false,
           message: "post not found",
-          post,
         });
       }
-
       res.status(200).json({
         success: true,
         message: "get post successfully!",
@@ -252,6 +251,24 @@ class PostController {
       });
     }
   }
+
+  // async uploadImage(req, res) {
+  //   const image = req.file;
+  //   try {
+  //     const newImage = await cloudinary.uploader.upload(image.path);
+
+  //     res.status(202).json({
+  //       success: true,
+  //       url: newImage.secure_url,
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //     res.status(500).json({
+  //       success: false,
+  //       message: "Internal Server Error",
+  //     });
+  //   }
+  // }
 }
 
 module.exports = new PostController();

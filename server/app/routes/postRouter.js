@@ -9,6 +9,12 @@ Router.post(
   upload.single("image"),
   PostController.createPost
 );
+// Router.post(
+//   "/upload",
+//   passport,
+//   upload.single("image"),
+//   PostController.uploadImage
+// );
 Router.get("/:postId", PostController.getPost);
 Router.delete("/:postId/delete", passport, PostController.removePost);
 Router.put(

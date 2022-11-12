@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import AuthService from "../services/AuthService";
 const token = JSON.parse(localStorage.getItem("user"));
-const timeResetToken = Date.now() + 60 * 60 * 1000;
+
 export const useAuthStore = defineStore("auth", {
   state: () => {
     return {
@@ -21,11 +21,7 @@ export const useAuthStore = defineStore("auth", {
     async login(payload) {
       try {
         const response = await AuthService.login(payload);
-        localStorage.setItem(
-          "user",
-          JSON.stringify(response.data.token),
-          timeResetToken
-        );
+        localStorage.setItem("user", JSON.stringify(response.data.token));
 
         if (response.data.success) {
           this.loggedIn = response.data.success;
@@ -38,11 +34,7 @@ export const useAuthStore = defineStore("auth", {
     async register(payload) {
       try {
         const response = await AuthService.register(payload);
-        localStorage.setItem(
-          "user",
-          JSON.stringify(response.data.token),
-          timeResetToken
-        );
+        localStorage.setItem("user", JSON.stringify(response.data.token));
         if (response.data.success) {
           this.loggedIn = response.data.success;
           return response.data;

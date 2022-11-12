@@ -7,6 +7,8 @@ export default {
     image: String,
     avatar: String,
     author: String,
+    favs: Array,
+    votes: Array,
     dateTime: String,
     isRemove: Boolean,
     isEdit: Boolean,
@@ -25,11 +27,19 @@ export default {
     const handleEditPost = (id) => {
       context.emit("edit-post", id);
     };
+    const handleVotePost = (id) => {
+      context.emit("vote-post", id);
+    };
+    const handleFavPost = (id) => {
+      context.emit("fav-post", id);
+    };
     return {
       props,
       options,
       handleEditPost,
       handleRemovePost,
+      handleVotePost,
+      handleFavPost,
     };
   },
 };
@@ -69,6 +79,27 @@ export default {
         <font-awesome-icon icon="fa-solid fa-trash" />
         Remove
       </span>
+    </div>
+    <div class="card__controls" v-else>
+      <span
+        class="card-control__item card__state card__state-fav"
+        @click="handleVotePost(props.id)"
+      >
+        {{ props.favs.length > 0 ? props.favs.length : "" }}
+        <font-awesome-icon icon="fa-solid fa-heart" />
+      </span>
+      <span
+        class="card-control__item card__state card__state-like"
+        @click="handleFavPost(props.id)"
+      >
+        {{ props.votes.length > 0 ? props.votes.length : "" }}
+
+        <font-awesome-icon icon="fa-solid fa-thumbs-up" />
+      </span>
+
+      <router-link :to="`/post/${props.id}`"
+        ><span>View Details</span></router-link
+      >
     </div>
   </div>
 </template>

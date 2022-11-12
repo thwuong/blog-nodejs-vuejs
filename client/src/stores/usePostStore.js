@@ -57,10 +57,11 @@ export const usePostStore = defineStore("post", {
       }
     },
     // find post
-    async fetchPosts(value) {
-      const keyword = value || "";
+    async fetchPosts(filters) {
+      const keyword = filters?.keyword || "";
+      const tags = filters?.tags || "";
       try {
-        const response = await PostService.getPosts(keyword);
+        const response = await PostService.getPosts(tags, keyword);
         if (response.data.success) {
           this.posts = response.data.posts;
           return response.data;
@@ -96,6 +97,16 @@ export const usePostStore = defineStore("post", {
     async favoritePost(id) {
       try {
         const response = await PostService.handlerFavorite(id);
+        if (response.data.success) {
+          return response.data;
+        }
+      } catch (error) {
+        return error.response.data.message || error.message;
+      }
+    },
+    async uploadImage(payload) {
+      try {
+        const response = await PostService.upload(payload);
         if (response.data.success) {
           return response.data;
         }

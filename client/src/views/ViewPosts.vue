@@ -4,8 +4,10 @@ import NavbarTop from "@/components/NavbarTop.vue";
 import Search from "@/components/Search.vue";
 import Filter from "@/components/Filter.vue";
 import { usePostStore } from "@/stores/usePostStore.js";
+import { useAuthStore } from "@/stores/useAuthStore.js";
 import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
+import { reactive, onMounted } from "vue";
 export default {
   components: {
     Card,
@@ -14,23 +16,37 @@ export default {
     Filter,
   },
   setup() {
+    const fillers = reactive({
+      keyword: "",
+      tags: "",
+    });
     const route = useRoute();
     const router = useRouter();
     const { posts } = storeToRefs(usePostStore());
     const { fetchPosts } = usePostStore();
-    const handleSeachPosts = async (value) => {
-      router.push(`${route.path}?keyword=${value}`);
-      await fetchPosts(value);
+    const searchingPosts = async (keyword) => {
+      router.push(`${route.path}?keyword=${keyword}`);
+      fillers.keyword = keyword;
+      await fetchPosts(fillers);
     };
-    const clearContent = () => {
+    const sortingPosts = async (tags) => {
+      router.push(`${route.path}?tags=${tags.join(",")}`);
+      fillers.tags = tags;
+      await fetchPosts(fillers);
+    };
+    const clearContentSearching = () => {
       router.push("");
-      fetchPosts();
+      fillers.keyword = "";
+      fetchPosts(fillers);
     };
-    fetchPosts();
+    onMounted(() => {
+      fetchPosts();
+    });
     return {
       posts,
-      handleSeachPosts,
-      clearContent,
+      searchingPosts,
+      clearContentSearching,
+      sortingPosts,
     };
   },
 };
@@ -48,26 +64,28 @@ export default {
         </div>
         <div class="posts__search">
           <search
-            @search-posts="handleSeachPosts"
-            @clear-content="clearContent"
+            @search-posts="searchingPosts"
+            @clear-content="clearContentSearching"
           />
         </div>
       </div>
       <div class="posts__filter">
-        <Filter />
+        <Filter @select-tags="sortingPosts" />
       </div>
       <div class="posts__content mx-auto">
         <div class="cards">
-          <router-link v-for="post in posts" :to="`/post/${post._id}`">
-            <card
-              :title="post.title"
-              :description="post.description"
-              :image="post.image"
-              :author="post.author.username"
-              :avatar="post.author.avatar"
-              :dateTime="post.createdAt"
-            />
-          </router-link>
+          <card
+            v-for="post in posts"
+            :id="post._id"
+            :title="post.title"
+            :description="post.description"
+            :image="post.image"
+            :favs="post.favs"
+            :votes="post.votes"
+            :author="post.author.username"
+            :avatar="post.author.avatar"
+            :dateTime="post.createdAt"
+          />
         </div>
       </div>
     </div>

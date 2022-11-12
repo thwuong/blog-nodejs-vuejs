@@ -1,12 +1,22 @@
 <script>
+import { QuillEditor } from "@vueup/vue-quill";
+import "@vueup/vue-quill/dist/vue-quill.snow.css";
+import ImageUploader from "quill-image-uploader";
+import BlotFormatter from "quill-blot-formatter";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
-import { ref, toRef } from "vue";
+import { ref } from "vue";
 
 export default {
-  props: { postSelected: { type: Object }, isEdit: { type: Boolean } },
-  components: { Form, Field, ErrorMessage },
+  props: {
+    postSelected: { type: Object, default: {} },
+    isEdit: { type: Boolean },
+  },
+  components: { Form, Field, ErrorMessage, QuillEditor },
   setup(props, context) {
+    const fileUpload = ref({});
+    const dataProperty = ref({});
+    const quill = ref({});
     const schemaPost = yup.object({
       title: yup.string().required().min(15).max(120),
       description: yup.string().max(255),
@@ -16,53 +26,76 @@ export default {
       author: yup.string(),
     });
 
-    const fileUpload = ref({});
-    const tags = ["technology", "entertainment", "law", "sports", "orther"];
+    const modules = {
+      name: "imageUploader",
+      module: ImageUploader,
+      module: BlotFormatter,
+      options: {
+        upload: (file) => {
+          // return new Promise(async (resolve, reject) => {
+          //   const formData = new FormData();
+          //   formData.append("image", file);
 
-    const createPost = (values) => {
-      const formData = new FormData();
-      formData.append("title", values.title);
-      formData.append("description", values.description);
-      formData.append("body", values.body);
-      formData.append("image", fileUpload.value);
-      formData.append("tags", values.tags);
-      context.emit("create-post", formData);
+          //   const res = await uploadImage(formData);
+
+          //   resolve(res.url);
+          // });
+
+          return new Promise((resolve, reject) => {
+            const formData = new FormData();
+            formData.append("image", file);
+            axios
+              .post("/upload-image", formData)
+              .then((res) => {
+                console.log(res);
+                resolve(res.data.url);
+              })
+              .catch((err) => {
+                reject("Upload failed");
+                console.error("Error:", err);
+              });
+          });
+        },
+      },
     };
-    const editPost = (values) => {
+    const tags = ["technology", "entertainment", "law", "sports", "orther"];
+    const submitForm = (values) => {
+      console.log(values, dataProperty.value, fileUpload.value);
       const formData = new FormData();
       formData.append("title", values.title);
       formData.append("description", values.description);
-      formData.append("body", values.body);
+      formData.append("body", dataProperty.value);
       formData.append("image", fileUpload.value);
       formData.append("tags", values.tags);
-      context.emit("edit-post", formData);
+      context.emit("submit-form", formData);
     };
     const handldeSelect = (event) => {
       fileUpload.value = event.target.files[0];
-      console.log(fileUpload.value);
     };
-
+    const onEditorUpdate = (e) => {
+      dataProperty.value = quill.value.root.innerHTML;
+    };
+    const onEditorReady = (e) => {
+      e.root.innerHTML = props.postSelected.body;
+      quill.value = e;
+    };
     return {
       schemaPost,
       props,
       tags,
-      createPost,
+      modules,
+      dataProperty,
+      submitForm,
       handldeSelect,
-      editPost,
+      onEditorUpdate,
+      onEditorReady,
     };
   },
 };
 </script>
 <template>
   <Form as="div" v-slot="{ handleSubmit }" :validation-schema="schemaPost">
-    <form
-      class="form__post"
-      @submit="
-        !isEdit
-          ? handleSubmit($event, createPost)
-          : handleSubmit($event, editPost)
-      "
-    >
+    <form class="form__post" @submit="handleSubmit($event, submitForm)">
       <div class="form__group">
         <label for="title" class="form__label">Title</label>
         <Field
@@ -87,17 +120,18 @@ export default {
         />
         <ErrorMessage name="description" class="text-rose-400" />
       </div>
+
       <div class="form__group">
-        <label for="body" class="form__label">Body</label>
-        <Field
-          class="form__input"
-          name="body"
-          id="body"
-          as="textarea"
-          v-model="props.postSelected.body"
-        >
-        </Field>
-        <ErrorMessage name="body" class="text-rose-400" />
+        <!-- Editor -->
+        <QuillEditor
+          theme="snow"
+          :modules="modules"
+          toolbar="full"
+          v-model:content="dataProperty"
+          @update:content="onEditorUpdate"
+          @ready="onEditorReady"
+        />
+        <!-- Editor -->
       </div>
       <div class="form__select">
         <div class="form__group">
@@ -121,6 +155,7 @@ export default {
             class="form__input"
             v-model="props.postSelected.tags"
           >
+            <option disabled value="">Select post tag</option>
             <option :value="tag" v-for="tag in tags">
               {{ tag }}
             </option>

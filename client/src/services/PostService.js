@@ -9,8 +9,8 @@ class PostService {
   async createPost(payload) {
     return await this.http.post("/newpost", payload, { headers: authHeader() });
   }
-  async getPosts(keyword) {
-    return await this.http.get(`/?keyword=${keyword}`);
+  async getPosts(tags, keyword) {
+    return await this.http.get(`/?tags=${tags}&keyword=${keyword}`);
   }
   async getPost(id) {
     return await this.http.get(`/${id}`);
@@ -28,6 +28,9 @@ class PostService {
   }
   async handlerFavorite(id) {
     return await this.http.put(`/${id}/favorite`, { headers: authHeader() });
+  }
+  async upload(payload) {
+    return await this.http.post("/upload", payload, { headers: authHeader() });
   }
 }
 

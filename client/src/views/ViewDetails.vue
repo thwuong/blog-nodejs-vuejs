@@ -3,6 +3,7 @@ import NavbarTop from "@/components/NavbarTop.vue";
 import { storeToRefs } from "pinia";
 import { usePostStore } from "@/stores/usePostStore.js";
 import { useRoute, useRouter } from "vue-router";
+import { onMounted } from "vue";
 export default {
   components: { NavbarTop },
   setup() {
@@ -23,7 +24,9 @@ export default {
         router.push({ name: "NotFound" });
       }
     };
-    getPostById(postId);
+    onMounted(() => {
+      getPostById(postId);
+    });
     return {
       post,
       options,
@@ -53,7 +56,7 @@ export default {
         <div class="post__image">
           <img :src="post.image" alt="" />
         </div>
-        <p class="post__body">{{ post.body }}</p>
+        <div class="post__body" v-html="post.body"></div>
       </div>
     </div>
   </div>

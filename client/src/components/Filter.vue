@@ -3,7 +3,6 @@ import { ref } from "vue";
 export default {
   setup(props, context) {
     const tags = ref([
-      "all",
       "technology",
       "entertainment",
       "law",
@@ -11,7 +10,7 @@ export default {
       "orther",
     ]);
     let selects = [];
-    const handleSelect = (e) => {
+    const handleSelected = (e) => {
       if (selects.some((select) => select === e.target.dataset.tag)) {
         selects = selects.filter((select) => select !== e.target.dataset.tag);
         e.target.classList.remove("active");
@@ -19,23 +18,12 @@ export default {
         selects.push(e.target.dataset.tag);
         e.target.classList.add("active");
       }
-      checkSelectAll();
-    };
-    const checkSelectAll = () => {
-      const elsActive = document.querySelectorAll(".filter__item.active");
-      const els = document.querySelectorAll(".filter__item");
-      elsActive.forEach((el) => {
-        if (el.dataset.tag === "all") {
-          els.forEach((el) => {
-            el.classList.add("active");
-          });
-        }
-      });
+      context.emit("select-tags", selects);
     };
 
     return {
       tags,
-      handleSelect,
+      handleSelected,
     };
   },
 };
@@ -46,7 +34,7 @@ export default {
       class="filter__item"
       v-for="tag in tags"
       :data-tag="tag"
-      @click="handleSelect"
+      @click="handleSelected"
     >
       {{ tag }}
     </span>

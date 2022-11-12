@@ -10,13 +10,11 @@ export default {
   setup(props, context) {
     const router = useRouter();
     const { loggedIn, userCurrent } = storeToRefs(useAuthStore());
-    const { getProfile } = useAuthStore();
     const { createPost } = usePostStore();
     const checkLogged = () => {
       if (!loggedIn.value) {
         router.push("/posts");
       }
-      getProfile();
     };
     checkLogged();
 
@@ -42,7 +40,7 @@ export default {
   <div class="form__create">
     <div class="container">
       <h1 class="form__heading">Create New Post</h1>
-      <FormPost @create-post="createNewPost" />
+      <FormPost @submit-form="createNewPost" />
     </div>
   </div>
 </template>

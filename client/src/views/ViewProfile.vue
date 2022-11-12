@@ -80,7 +80,7 @@ export default {
 </template>
 <style>
 .user {
-  @apply mt-[90px];
+  @apply my-[90px];
 }
 .user__profile {
   @apply flex items-center gap-6 bg-gray-200 p-2 rounded-xl;

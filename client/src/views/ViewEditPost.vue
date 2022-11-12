@@ -49,7 +49,7 @@ export default {
     <div class="container">
       <h1 class="form__heading">Edit Post</h1>
       <FormPost
-        @edit-post="handleEditPost"
+        @submit-form="handleEditPost"
         :postSelected="post"
         :isEdit="true"
       />

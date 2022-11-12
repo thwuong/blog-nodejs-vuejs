@@ -3,23 +3,24 @@ import { ref } from "vue";
 export default {
   setup(props, context) {
     const isClear = ref(false);
+    const keyword = ref("");
     const searchPosts = (e) => {
       const keyWord = e.target.value;
       isClear.value = keyWord ? true : false;
       context.emit("search-posts", keyWord);
     };
     const clearContentSearch = (e) => {
-      const elSearch = document.querySelector(".search__input");
-      elSearch.value = "";
+      keyword.value = "";
       isClear.value = false;
 
-      context.emit("clear-content", elSearch.value);
+      context.emit("clear-content", keyword.value);
     };
 
     return {
       searchPosts,
       clearContentSearch,
       isClear,
+      keyword,
     };
   },
 };
@@ -31,6 +32,7 @@ export default {
       class="search__input"
       placeholder="search posts....."
       name="keyword"
+      v-model="keyword"
       @keyup="searchPosts"
     />
     <div class="search__clear" v-if="isClear" @click="clearContentSearch">
