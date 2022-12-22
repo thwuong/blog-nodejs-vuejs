@@ -3,7 +3,7 @@
 @tailwind utilities;
 @layer components {
   .app__container {
-    @apply w-[1024px] mx-auto;
+    @apply w-[1200px] mx-auto;
   }
   .btn {
     @apply py-2 px-4 rounded-lg font-semibold;
@@ -36,7 +36,7 @@
     @apply w-[28px] h-[28px] rounded-full overflow-hidden;
   }
   .posts {
-    @apply w-[1024px] mx-auto mb-[90px];
+    @apply w-full mx-auto mb-[90px];
   }
   .posts__intro {
     @apply mt-20 flex items-end justify-between;
@@ -54,13 +54,16 @@
     @apply mt-5 block font-primary font-semibold text-lg text-neutral-400;
   }
   .cards {
-    @apply mt-16 grid grid-cols-3 gap-x-6 gap-y-16;
+    @apply mt-16 grid grid-cols-4 gap-x-6 gap-y-16;
   }
   .card {
-    @apply bg-gray-400/50 rounded-lg overflow-hidden ease-out duration-300 hover:bg-gray-400/25;
+    @apply bg-gray-500/50 rounded-lg overflow-hidden ease-out duration-300 hover:bg-gray-500/75;
   }
   .card__img {
-    @apply w-full h-40 overflow-hidden;
+    @apply w-full h-40 min-h-fit overflow-hidden cursor-pointer;
+  }
+  .card__img img {
+    @apply bg-cover w-full h-full;
   }
   .card__body {
     @apply m-4 truncate text-base;
@@ -75,15 +78,15 @@
     @apply flex items-center my-4 ml-4 gap-5;
   }
   .card__author-name {
-    @apply text-neutral-400 font-primary font-semibold text-xs
+    @apply text-neutral-600 font-primary font-semibold text-xs
     relative;
   }
   .card__author-name::after {
     content: "";
     position: absolute;
-    height: 18px;
-    width: 2px;
-    background: #ccc;
+    height: 16px;
+    width: 1px;
+    background: #70777f;
     right: -12px;
     top: 0;
   }
@@ -91,7 +94,7 @@
     @apply rounded-full w-11 h-11 overflow-hidden;
   }
   .card__datetime {
-    @apply text-neutral-400 font-primary font-semibold text-xs;
+    @apply text-neutral-600 font-primary font-semibold text-xs;
   }
   .card__controls {
     @apply ml-4 my-3;
@@ -105,14 +108,21 @@
   .card-control__item-remove {
     @apply bg-rose-400;
   }
-  .card__state {
-    @apply p-0 text-xl drop-shadow-2xl;
+  .card__status {
+    @apply text-xl flex items-center gap-5;
   }
-  .card__state-fav.active {
+  .card__status-fav.active {
     @apply text-rose-500;
   }
-  .card__state-like.active {
+  .card__status-like.active {
     @apply text-blue-500;
+  }
+  .card__status-like,
+  .card__status-fav {
+    @apply cursor-pointer text-white;
+  }
+  .card__view {
+    @apply text-right;
   }
   /* FormAuth */
   .auth__signup,

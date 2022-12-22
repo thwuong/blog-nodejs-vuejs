@@ -3,10 +3,10 @@ import Card from "@/components/Card.vue";
 import NavbarTop from "@/components/NavbarTop.vue";
 import Search from "@/components/Search.vue";
 import Filter from "@/components/Filter.vue";
+
 import { usePostStore } from "@/stores/usePostStore.js";
-import { useAuthStore } from "@/stores/useAuthStore.js";
 import { storeToRefs } from "pinia";
-import { useRoute, useRouter } from "vue-router";
+
 import { reactive, onMounted } from "vue";
 export default {
   components: {
@@ -16,28 +16,32 @@ export default {
     Filter,
   },
   setup() {
-    const fillers = reactive({
+    const filters = reactive({
       keyword: "",
       tags: "",
     });
-    const route = useRoute();
-    const router = useRouter();
+
     const { posts } = storeToRefs(usePostStore());
-    const { fetchPosts } = usePostStore();
+    const { fetchPosts, likePost, favoritePost } = usePostStore();
     const searchingPosts = async (keyword) => {
-      router.push(`${route.path}?keyword=${keyword}`);
-      fillers.keyword = keyword;
-      await fetchPosts(fillers);
+      filters.keyword = keyword;
+      await fetchPosts(filters);
     };
     const sortingPosts = async (tags) => {
-      router.push(`${route.path}?tags=${tags.join(",")}`);
-      fillers.tags = tags;
-      await fetchPosts(fillers);
+      filters.tags = tags;
+      await fetchPosts(filters);
     };
     const clearContentSearching = () => {
-      router.push("");
-      fillers.keyword = "";
-      fetchPosts(fillers);
+      filters.keyword = "";
+      fetchPosts(filters);
+    };
+    const vottingPost = async (id) => {
+      await likePost(id);
+      fetchPosts();
+    };
+    const favingPost = async (id) => {
+      await favoritePost(id);
+      fetchPosts();
     };
     onMounted(() => {
       fetchPosts();
@@ -47,6 +51,8 @@ export default {
       searchingPosts,
       clearContentSearching,
       sortingPosts,
+      vottingPost,
+      favingPost,
     };
   },
 };
@@ -85,6 +91,8 @@ export default {
             :author="post.author.username"
             :avatar="post.author.avatar"
             :dateTime="post.createdAt"
+            @vote-post="vottingPost"
+            @fav-post="favingPost"
           />
         </div>
       </div>

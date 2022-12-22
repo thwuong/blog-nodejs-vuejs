@@ -52,7 +52,7 @@ class PostController {
     }
     if (req.query.tags) {
       filter = {
-        tags: req.query.tags.split(","),
+        tags: req.query.tags,
       };
     }
 
@@ -180,6 +180,7 @@ class PostController {
     try {
       const posts = await Post.findOne(condition).select("votes");
       const check = [...posts.votes].some((vote) => vote.toString() === userId);
+
       let postUpdate = {};
       if (check) {
         postUpdate = await Post.findByIdAndUpdate(
@@ -214,6 +215,7 @@ class PostController {
   async handleFavsPost(req, res) {
     // get id user like and post is liking
     // check user exsting likes if those user in likes remove user or revese
+    console.log(123);
     const condition = { _id: req.params.postId };
     const userId = req.userId;
 

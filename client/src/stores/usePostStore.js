@@ -17,9 +17,6 @@ export const usePostStore = defineStore("post", {
         (post) => post.author._id === userCurrent.value._id
       );
     },
-    getPostById() {
-      return this.post;
-    },
   },
   actions: {
     // create post
@@ -58,10 +55,8 @@ export const usePostStore = defineStore("post", {
     },
     // find post
     async fetchPosts(filters) {
-      const keyword = filters?.keyword || "";
-      const tags = filters?.tags || "";
       try {
-        const response = await PostService.getPosts(tags, keyword);
+        const response = await PostService.getPosts(filters);
         if (response.data.success) {
           this.posts = response.data.posts;
           return response.data;
@@ -97,16 +92,6 @@ export const usePostStore = defineStore("post", {
     async favoritePost(id) {
       try {
         const response = await PostService.handlerFavorite(id);
-        if (response.data.success) {
-          return response.data;
-        }
-      } catch (error) {
-        return error.response.data.message || error.message;
-      }
-    },
-    async uploadImage(payload) {
-      try {
-        const response = await PostService.upload(payload);
         if (response.data.success) {
           return response.data;
         }

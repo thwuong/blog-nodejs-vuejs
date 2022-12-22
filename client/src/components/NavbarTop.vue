@@ -138,9 +138,9 @@ export default {
     </div>
   </div>
 </template>
-<style>
+<style scoped>
 .navbar {
-  width: 1024px;
+  width: 1200px;
 }
 .navbar__logo {
   width: 80px;

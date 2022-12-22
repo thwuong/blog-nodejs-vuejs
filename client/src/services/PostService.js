@@ -9,8 +9,8 @@ class PostService {
   async createPost(payload) {
     return await this.http.post("/newpost", payload, { headers: authHeader() });
   }
-  async getPosts(tags, keyword) {
-    return await this.http.get(`/?tags=${tags}&keyword=${keyword}`);
+  async getPosts(params = {}) {
+    return await this.http.get("/", { params });
   }
   async getPost(id) {
     return await this.http.get(`/${id}`);
@@ -24,13 +24,14 @@ class PostService {
     return await this.http.delete(`/${id}/delete`, { headers: authHeader() });
   }
   async handlerLike(id) {
-    return await this.http.put(`/${id}/like`, { headers: authHeader() });
+    return await this.http.put(`/${id}/like`, {}, { headers: authHeader() });
   }
   async handlerFavorite(id) {
-    return await this.http.put(`/${id}/favorite`, { headers: authHeader() });
-  }
-  async upload(payload) {
-    return await this.http.post("/upload", payload, { headers: authHeader() });
+    return await this.http.put(
+      `/${id}/favorite`,
+      {},
+      { headers: authHeader() }
+    );
   }
 }
 

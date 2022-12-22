@@ -1,4 +1,6 @@
 <script>
+import { useAuthStore } from "../stores/useAuthStore";
+import { storeToRefs } from "pinia";
 export default {
   props: {
     id: String,
@@ -15,11 +17,18 @@ export default {
   },
 
   setup(props, context) {
+    const { userCurrent } = storeToRefs(useAuthStore());
     const options = {
       weekday: "short",
       year: "numeric",
       month: "short",
       day: "numeric",
+    };
+    const checkActiveLike = (likes) => {
+      return likes?.some((like) => like === userCurrent.value._id);
+    };
+    const checkActiveFav = (favs) => {
+      return favs?.some((fav) => fav === userCurrent.value._id);
     };
     const handleRemovePost = (id) => {
       context.emit("remove-post", id);
@@ -40,6 +49,8 @@ export default {
       handleRemovePost,
       handleVotePost,
       handleFavPost,
+      checkActiveLike,
+      checkActiveFav,
     };
   },
 };
@@ -47,9 +58,11 @@ export default {
 
 <template>
   <div class="card">
-    <div class="card__img">
-      <img :src="props.image" class="card__img-src" />
-    </div>
+    <router-link :to="`/post/${props.id}`">
+      <div class="card__img">
+        <img :src="props.image" class="card__img-src" />
+      </div>
+    </router-link>
     <div class="card__body">
       <h2 class="card__title">{{ props.title }}</h2>
       <span class="card__sub">
@@ -81,25 +94,28 @@ export default {
       </span>
     </div>
     <div class="card__controls" v-else>
-      <span
-        class="card-control__item card__state card__state-fav"
-        @click="handleVotePost(props.id)"
-      >
-        {{ props.favs.length > 0 ? props.favs.length : "" }}
-        <font-awesome-icon icon="fa-solid fa-heart" />
-      </span>
-      <span
-        class="card-control__item card__state card__state-like"
-        @click="handleFavPost(props.id)"
-      >
-        {{ props.votes.length > 0 ? props.votes.length : "" }}
-
-        <font-awesome-icon icon="fa-solid fa-thumbs-up" />
-      </span>
-
-      <router-link :to="`/post/${props.id}`"
-        ><span>View Details</span></router-link
-      >
+      <div class="card__status">
+        <span
+          :class="[
+            'card__status-fav',
+            checkActiveFav(props.favs) ? 'active' : '',
+          ]"
+          @click="handleFavPost(props.id)"
+        >
+          {{ props.favs.length > 0 ? props.favs.length : "" }}
+          <font-awesome-icon icon="fa-solid fa-heart" />
+        </span>
+        <span
+          :class="[
+            'card__status-like',
+            checkActiveLike(props.votes) ? 'active' : '',
+          ]"
+          @click="handleVotePost(props.id)"
+        >
+          {{ props.votes.length > 0 ? props.votes.length : "" }}
+          <font-awesome-icon icon="fa-solid fa-thumbs-up" />
+        </span>
+      </div>
     </div>
   </div>
 </template>

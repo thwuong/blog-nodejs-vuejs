@@ -39,11 +39,7 @@ class authController {
       }
       const passwordValid = await argon2.verify(user.password, password);
       if (passwordValid) {
-        const token = jwt.sign(
-          { payload: user._id },
-          process.env.TOKEN_SECRET,
-          { expiresIn: "12h" }
-        );
+        const token = jwt.sign({ payload: user._id }, process.env.TOKEN_SECRET);
         res.status(200).json({
           success: true,
           message: "Login successfully!",
@@ -95,8 +91,7 @@ class authController {
       await newUser.save();
       const token = jwt.sign(
         { payload: newUser._id },
-        process.env.TOKEN_SECRET,
-        { expiresIn: "12h" }
+        process.env.TOKEN_SECRET
       );
       res.status(200).json({
         success: true,

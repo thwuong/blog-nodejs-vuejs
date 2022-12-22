@@ -98,7 +98,7 @@ export default {
 </template>
 <style>
 .auth {
-  width: 1024px;
+  width: 100%;
   margin: 0 auto;
   height: 70vh;
 }

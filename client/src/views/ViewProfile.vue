@@ -4,13 +4,11 @@ import Card from "@/components/Card.vue";
 import { useAuthStore } from "@/stores/useAuthStore.js";
 import { usePostStore } from "@/stores/usePostStore.js";
 import { storeToRefs } from "pinia";
-import { useRoute, useRouter } from "vue-router";
-import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 export default {
   components: { NavbarTop, Card },
   setup() {
-    const posts = ref([]);
     const router = useRouter();
     const { loggedIn } = storeToRefs(useAuthStore());
     const { getPostOfCurrentUser } = storeToRefs(usePostStore());
@@ -32,7 +30,6 @@ export default {
       }
     };
     return {
-      posts,
       getPostOfCurrentUser,
       handleRemovePost,
     };

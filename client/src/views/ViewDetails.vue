@@ -61,9 +61,4 @@ export default {
     </div>
   </div>
 </template>
-<style>
-.detail {
-  width: 1024px;
-  margin: 0 auto;
-}
-</style>
+<style></style>

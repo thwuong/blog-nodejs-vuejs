@@ -22,6 +22,7 @@ import {
   faMagnifyingGlass,
   faXmark,
   faThumbsUp,
+  faEye,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -33,6 +34,7 @@ library.add(
   faUser,
   faLock,
   faArrowsLeftRightToLine,
+  faEye,
   faMagnifyingGlass,
   faXmark,
   faThumbsUp
