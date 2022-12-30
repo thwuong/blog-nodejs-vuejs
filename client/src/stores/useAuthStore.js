@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { useToast } from "../stores/useToastStore";
-import AuthService from "@/services/AuthService.js";
+import AuthService from "@/services/AuthService";
 const token = JSON.parse(localStorage.getItem("user"));
 
 export const useAuthStore = defineStore("auth", {
