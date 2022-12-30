@@ -4,6 +4,7 @@ import NavbarTop from "@/components/NavbarTop.vue";
 import Search from "@/components/Search.vue";
 import Filter from "@/components/Filter.vue";
 
+import { useAuthStore } from "../stores/useAuthStore";
 import { usePostStore } from "@/stores/usePostStore.js";
 import { storeToRefs } from "pinia";
 
@@ -21,6 +22,7 @@ export default {
       tags: "",
     });
 
+    const { loggedIn } = storeToRefs(useAuthStore());
     const { posts } = storeToRefs(usePostStore());
     const { fetchPosts, likePost, favoritePost } = usePostStore();
     const searchingPosts = async (keyword) => {
@@ -36,12 +38,21 @@ export default {
       fetchPosts(filters);
     };
     const vottingPost = async (id) => {
-      await likePost(id);
-      fetchPosts();
+      console.log(loggedIn.value);
+      if (!loggedIn.value) {
+        alert("ban chua login");
+      } else {
+        await likePost(id);
+        fetchPosts();
+      }
     };
     const favingPost = async (id) => {
-      await favoritePost(id);
-      fetchPosts();
+      if (!loggedIn.value) {
+        alert("ban chua login");
+      } else {
+        await favoritePost(id);
+        fetchPosts();
+      }
     };
     onMounted(() => {
       fetchPosts();
@@ -91,7 +102,6 @@ export default {
             :author="post.author.username"
             :avatar="post.author.avatar"
             :dateTime="post.createdAt"
-            @vote-post="vottingPost"
             @fav-post="favingPost"
           />
         </div>

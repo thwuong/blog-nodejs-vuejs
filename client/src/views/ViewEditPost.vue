@@ -5,13 +5,14 @@ import { useAuthStore } from "@/stores/useAuthStore.js";
 import { usePostStore } from "@/stores/usePostStore.js";
 import { storeToRefs } from "pinia";
 import { useRouter, useRoute } from "vue-router";
+import { onMounted } from "vue";
 export default {
   components: { FormPost, NavbarTop },
   setup(props, context) {
     const router = useRouter();
     const route = useRoute();
 
-    const { loggedIn, userCurrent } = storeToRefs(useAuthStore());
+    const { loggedIn } = storeToRefs(useAuthStore());
     const { getProfile } = useAuthStore();
     const { post } = storeToRefs(usePostStore());
     const { editPost, findPost } = usePostStore();
@@ -25,7 +26,6 @@ export default {
       await getProfile();
     };
     const handleEditPost = async (postUpdate) => {
-      postUpdate.append("author", userCurrent.value._id);
       const { success, message } = await editPost(postId, postUpdate);
       if (success) {
         alert(message);
@@ -34,8 +34,9 @@ export default {
         alert(message);
       }
     };
-
-    checkLogged();
+    onMounted(() => {
+      checkLogged();
+    });
     return {
       handleEditPost,
       post,
@@ -50,8 +51,8 @@ export default {
       <h1 class="form__heading">Edit Post</h1>
       <FormPost
         @submit-form="handleEditPost"
-        :postSelected="post"
         :isEdit="true"
+        :postSelected="post"
       />
     </div>
   </div>

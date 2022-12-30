@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 @layer components {
+  .app {
+    @apply w-full;
+  }
   .app__container {
     @apply w-[1200px] mx-auto;
   }
@@ -19,6 +22,9 @@
   }
   .btn-save {
     @apply bg-yellow-500 text-white hover:bg-yellow-600/75;
+  }
+  .btn-add {
+    @apply bg-green-500 text-white hover:bg-green-600/75;
   }
   .btn-full {
     @apply w-full;
@@ -114,10 +120,6 @@
   .card__status-fav.active {
     @apply text-rose-500;
   }
-  .card__status-like.active {
-    @apply text-blue-500;
-  }
-  .card__status-like,
   .card__status-fav {
     @apply cursor-pointer text-white;
   }
@@ -207,10 +209,10 @@
     @apply w-full flex items-center justify-between rounded-lg overflow-hidden bg-gray-200 relative;
   }
   .search__input {
-    @apply w-2/3 py-2 px-3 bg-gray-200 outline-none;
+    @apply w-4/5 py-2 px-3 bg-gray-200 outline-none;
   }
   .search__clear {
-    @apply absolute right-14 top-1 text-orange-500 text-2xl;
+    @apply absolute right-12 mr-1 top-1 text-orange-500 text-2xl;
   }
   .search__icon {
     @apply py-2 px-3 bg-gray-500 cursor-pointer text-white font-bold;

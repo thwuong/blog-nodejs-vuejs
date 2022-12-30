@@ -5,7 +5,7 @@ import ImageUploader from "quill-image-uploader";
 import BlotFormatter from "quill-blot-formatter";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 export default {
   props: {
@@ -14,9 +14,10 @@ export default {
   },
   components: { Form, Field, ErrorMessage, QuillEditor },
   setup(props, context) {
+    const content = ref("");
     const fileUpload = ref({});
-    const dataProperty = ref({});
-    const quill = ref({});
+    const quill = ref(null);
+    const tags = ["technology", "entertainment", "law", "sports", "orther"];
     const schemaPost = yup.object({
       title: yup.string().required().min(15).max(120),
       description: yup.string().max(255),
@@ -25,25 +26,16 @@ export default {
       tags: yup.string(),
       author: yup.string(),
     });
-
     const modules = {
       name: "imageUploader",
       module: ImageUploader,
       module: BlotFormatter,
       options: {
         upload: (file) => {
-          // return new Promise(async (resolve, reject) => {
-          //   const formData = new FormData();
-          //   formData.append("image", file);
-
-          //   const res = await uploadImage(formData);
-
-          //   resolve(res.url);
-          // });
-
           return new Promise((resolve, reject) => {
             const formData = new FormData();
             formData.append("image", file);
+
             axios
               .post("/upload-image", formData)
               .then((res) => {
@@ -58,37 +50,37 @@ export default {
         },
       },
     };
-    const tags = ["technology", "entertainment", "law", "sports", "orther"];
+
+    // methods
     const submitForm = (values) => {
-      console.log(values, dataProperty.value, fileUpload.value);
       const formData = new FormData();
       formData.append("title", values.title);
       formData.append("description", values.description);
-      formData.append("body", dataProperty.value);
+      formData.append("body", quill.value.getHTML());
       formData.append("image", fileUpload.value);
       formData.append("tags", values.tags);
       context.emit("submit-form", formData);
     };
-    const handldeSelect = (event) => {
+
+    const handldeChangeFile = (event) => {
       fileUpload.value = event.target.files[0];
     };
-    const onEditorUpdate = (e) => {
-      dataProperty.value = quill.value.root.innerHTML;
-    };
-    const onEditorReady = (e) => {
-      e.root.innerHTML = props.postSelected.body;
-      quill.value = e;
-    };
+
+    // hooks
+    onMounted(() => {
+      setTimeout(() => {
+        quill.value.setHTML(props.postSelected.body);
+      }, 500);
+    });
     return {
       schemaPost,
-      props,
       tags,
       modules,
-      dataProperty,
+      quill,
+      props,
+      content,
       submitForm,
-      handldeSelect,
-      onEditorUpdate,
-      onEditorReady,
+      handldeChangeFile,
     };
   },
 };
@@ -124,12 +116,11 @@ export default {
       <div class="form__group">
         <!-- Editor -->
         <QuillEditor
+          ref="quill"
           theme="snow"
-          :modules="modules"
           toolbar="full"
-          v-model:content="dataProperty"
-          @update:content="onEditorUpdate"
-          @ready="onEditorReady"
+          :modules="modules"
+          v-model:content="content"
         />
         <!-- Editor -->
       </div>
@@ -137,7 +128,7 @@ export default {
         <div class="form__group">
           <label for="file" class="form__label">Image</label>
           <Field name="file">
-            <input type="file" @change="handldeSelect" multiple />
+            <input type="file" @change="handldeChangeFile" multiple />
           </Field>
           <ErrorMessage name="file" class="text-rose-400" />
         </div>

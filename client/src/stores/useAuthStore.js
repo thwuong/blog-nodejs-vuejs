@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { useToast } from "../stores/useToastStore";
 import AuthService from "../services/AuthService";
 const token = JSON.parse(localStorage.getItem("user"));
 
@@ -19,16 +20,19 @@ export const useAuthStore = defineStore("auth", {
   },
   actions: {
     async login(payload) {
+      const { setToast } = useToast();
+
       try {
         const response = await AuthService.login(payload);
         localStorage.setItem("user", JSON.stringify(response.data.token));
 
         if (response.data.success) {
           this.loggedIn = response.data.success;
-          return response.data;
+          this.router.push({ name: "ViewPosts" });
+          setToast(response.data);
         }
       } catch (error) {
-        return error.response.data || error.message;
+        setToast(error.response.data);
       }
     },
     async register(payload) {

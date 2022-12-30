@@ -24,9 +24,6 @@ export default {
       month: "short",
       day: "numeric",
     };
-    const checkActiveLike = (likes) => {
-      return likes?.some((like) => like === userCurrent.value._id);
-    };
     const checkActiveFav = (favs) => {
       return favs?.some((fav) => fav === userCurrent.value._id);
     };
@@ -36,9 +33,6 @@ export default {
     const handleEditPost = (id) => {
       context.emit("edit-post", id);
     };
-    const handleVotePost = (id) => {
-      context.emit("vote-post", id);
-    };
     const handleFavPost = (id) => {
       context.emit("fav-post", id);
     };
@@ -47,9 +41,7 @@ export default {
       options,
       handleEditPost,
       handleRemovePost,
-      handleVotePost,
       handleFavPost,
-      checkActiveLike,
       checkActiveFav,
     };
   },
@@ -104,16 +96,6 @@ export default {
         >
           {{ props.favs.length > 0 ? props.favs.length : "" }}
           <font-awesome-icon icon="fa-solid fa-heart" />
-        </span>
-        <span
-          :class="[
-            'card__status-like',
-            checkActiveLike(props.votes) ? 'active' : '',
-          ]"
-          @click="handleVotePost(props.id)"
-        >
-          {{ props.votes.length > 0 ? props.votes.length : "" }}
-          <font-awesome-icon icon="fa-solid fa-thumbs-up" />
         </span>
       </div>
     </div>

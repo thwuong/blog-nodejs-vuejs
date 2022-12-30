@@ -23,10 +23,7 @@ class PostService {
   async removePost(id) {
     return await this.http.delete(`/${id}/delete`, { headers: authHeader() });
   }
-  async handlerLike(id) {
-    return await this.http.put(`/${id}/like`, {}, { headers: authHeader() });
-  }
-  async handlerFavorite(id) {
+  async likePost(id) {
     return await this.http.put(
       `/${id}/favorite`,
       {},

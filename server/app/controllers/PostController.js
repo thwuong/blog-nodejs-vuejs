@@ -171,57 +171,12 @@ class PostController {
       });
     }
   }
-  async handleLikePost(req, res) {
-    // get id user like and blog is liking
-    // check user exsting likes if those user in likes remove user or revese
+  async likePost(req, res) {
     const condition = { _id: req.params.postId };
     const userId = req.userId;
-
     try {
-      const posts = await Post.findOne(condition).select("votes");
-      const check = [...posts.votes].some((vote) => vote.toString() === userId);
-
-      let postUpdate = {};
-      if (check) {
-        postUpdate = await Post.findByIdAndUpdate(
-          condition,
-          {
-            $pull: { votes: userId },
-          },
-          { new: true }
-        );
-      } else {
-        postUpdate = await Post.findByIdAndUpdate(
-          condition,
-          {
-            $push: { votes: userId },
-          },
-          { new: true }
-        );
-      }
-      // add socket
-      res.status(201).json({
-        success: true,
-        postUpdate,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        success: false,
-        message: "Internal Server Error",
-      });
-    }
-  }
-  async handleFavsPost(req, res) {
-    // get id user like and post is liking
-    // check user exsting likes if those user in likes remove user or revese
-    console.log(123);
-    const condition = { _id: req.params.postId };
-    const userId = req.userId;
-
-    try {
-      const posts = await Post.findOne(condition).select("votes");
-      const check = [...posts.votes].some((vote) => vote.toString() === userId);
+      const post = await Post.findOne(condition).select("favs");
+      const check = [...post.favs].some((vote) => vote.toString() === userId);
       let postUpdate = {};
       if (check) {
         postUpdate = await Post.findByIdAndUpdate(
@@ -243,6 +198,7 @@ class PostController {
       // add socket
       res.status(201).json({
         success: true,
+        message: "liked post successfully!",
         postUpdate,
       });
     } catch (error) {
@@ -253,24 +209,6 @@ class PostController {
       });
     }
   }
-
-  // async uploadImage(req, res) {
-  //   const image = req.file;
-  //   try {
-  //     const newImage = await cloudinary.uploader.upload(image.path);
-
-  //     res.status(202).json({
-  //       success: true,
-  //       url: newImage.secure_url,
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //     res.status(500).json({
-  //       success: false,
-  //       message: "Internal Server Error",
-  //     });
-  //   }
-  // }
 }
 
 module.exports = new PostController();

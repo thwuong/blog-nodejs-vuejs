@@ -1,18 +1,26 @@
 <script>
 import NavbarTop from "@/components/NavbarTop.vue";
 import Card from "@/components/Card.vue";
+import Modal from "@/components/Modal.vue";
+
+import { useModalStore } from "@/stores/useModalStore.js";
 import { useAuthStore } from "@/stores/useAuthStore.js";
 import { usePostStore } from "@/stores/usePostStore.js";
 import { storeToRefs } from "pinia";
+
 import { useRouter } from "vue-router";
+import { onMounted } from "vue";
 
 export default {
-  components: { NavbarTop, Card },
+  components: { NavbarTop, Card, Modal },
   setup() {
     const router = useRouter();
-    const { loggedIn } = storeToRefs(useAuthStore());
+
+    const { setModal } = useModalStore();
+    const { loggedIn, userCurrent } = storeToRefs(useAuthStore());
     const { getPostOfCurrentUser } = storeToRefs(usePostStore());
     const { fetchPosts, removePost } = usePostStore();
+
     const checkLogged = () => {
       if (loggedIn.value) {
         fetchPosts();
@@ -20,7 +28,7 @@ export default {
         router.push("/posts");
       }
     };
-    checkLogged();
+
     const handleRemovePost = async (id) => {
       const { success, message } = await removePost(id);
       if (success) {
@@ -29,9 +37,14 @@ export default {
         alert(message);
       }
     };
+    onMounted(() => {
+      checkLogged();
+    });
     return {
       getPostOfCurrentUser,
       handleRemovePost,
+      userCurrent,
+      setModal,
     };
   },
 };
@@ -42,17 +55,14 @@ export default {
     <div class="user">
       <div class="user__profile">
         <div class="user__avatar">
-          <img
-            src="../assets/images/IMG_1617893921168_1617894411066.jpg"
-            alt=""
-          />
+          <img :src="userCurrent.avatar" />
         </div>
         <div class="user__info">
-          <h3 class="user__name">Thuong Duong</h3>
+          <h3 class="user__name">{{ userCurrent.username }}</h3>
           <span class="user__followings"> 730 followings </span>
         </div>
         <div class="user__control">
-          <div class="user__edit">
+          <div class="user__edit" @click="setModal">
             <font-awesome-icon icon="fa-solid fa-pen" />
             Edit profile
           </div>
@@ -74,6 +84,7 @@ export default {
       </div>
     </div>
   </div>
+  <Modal></Modal>
 </template>
 <style>
 .user {

@@ -71,27 +71,16 @@ export const usePostStore = defineStore("post", {
         const response = await PostService.getPost(id);
         if (response.data.success) {
           this.post = response.data.post;
-          return response.data;
         }
       } catch (error) {
         return error.response.data.message || error.message;
       }
     },
-    // likes
-    async likePost(id) {
-      try {
-        const response = await PostService.handlerLike(id);
-        if (response.data.success) {
-          return response.data;
-        }
-      } catch (error) {
-        return error.response.data.message || error.message;
-      }
-    },
-    // fovs handlerFavorite
+
+    //handlerFavorite
     async favoritePost(id) {
       try {
-        const response = await PostService.handlerFavorite(id);
+        const response = await PostService.likePost(id);
         if (response.data.success) {
           return response.data;
         }

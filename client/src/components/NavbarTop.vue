@@ -46,6 +46,9 @@ export default {
           </router-link>
         </div>
         <ul class="navbar__menu flex gap-6 items-center">
+          <li :class="['btn btn-add']" v-if="loggedIn">
+            <router-link to="/post/newpost">Add Post</router-link>
+          </li>
           <li
             :class="[
               props.itemActive == 'posts' ? classActive : '',

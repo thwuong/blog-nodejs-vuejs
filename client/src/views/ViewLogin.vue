@@ -5,6 +5,7 @@ import { useAuthStore } from "@/stores/useAuthStore.js";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import * as yup from "yup";
+import { onMounted } from "vue";
 
 const schemaSignin = yup.object({
   username: yup.string().required().min(8),
@@ -21,21 +22,16 @@ export default {
         router.push("/posts");
       }
     };
-    checkLogged();
     const handleLogin = async (values) => {
-      const { success, message } = await login({
+      await login({
         username: values.username,
         password: values.password,
       });
-      if (success) {
-        router.push("/posts");
-      } else {
-        alert(message);
-      }
     };
+    checkLogged();
+    onMounted(() => {});
     return {
       schemaSignin,
-      router,
       handleLogin,
     };
   },

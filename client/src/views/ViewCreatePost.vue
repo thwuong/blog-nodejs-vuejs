@@ -7,11 +7,13 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 export default {
   components: { FormPost, NavbarTop },
-  setup(props, context) {
+  setup() {
     const router = useRouter();
     const { loggedIn, userCurrent } = storeToRefs(useAuthStore());
+    const { post } = storeToRefs(usePostStore());
     const { createPost } = usePostStore();
     const checkLogged = () => {
+      post.value = {};
       if (!loggedIn.value) {
         router.push("/posts");
       }
@@ -19,7 +21,7 @@ export default {
     checkLogged();
 
     const createNewPost = async (newPost) => {
-      newPost.append("author", userCurrent.value._id);
+      // newPost.append("author", userCurrent.value._id);
       const { success, message } = await createPost(newPost);
 
       if (success) {

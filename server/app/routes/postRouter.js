@@ -9,12 +9,6 @@ Router.post(
   upload.single("image"),
   PostController.createPost
 );
-// Router.post(
-//   "/upload",
-//   passport,
-//   upload.single("image"),
-//   PostController.uploadImage
-// );
 Router.get("/:postId", PostController.getPost);
 Router.delete("/:postId/delete", passport, PostController.removePost);
 Router.put(
@@ -23,8 +17,7 @@ Router.put(
   upload.single("image"),
   PostController.editPost
 );
-Router.put("/:postId/like", passport, PostController.handleLikePost);
-Router.put("/:postId/favorite", passport, PostController.handleFavsPost);
+Router.put("/:postId/favorite", passport, PostController.likePost);
 Router.get("/", PostController.getPosts);
 
 module.exports = Router;
