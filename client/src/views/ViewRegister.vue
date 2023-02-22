@@ -1,23 +1,23 @@
 <script>
-import NavbarTop from "@/components/NavbarTop.vue";
+import NavbarTop from "../components/NavbarTop.vue";
 import * as yup from "yup";
 import { Form, Field, ErrorMessage } from "vee-validate";
-import { useAuthStore } from "@/stores/useAuthStore.js";
+import { useAuthStore } from "../stores/useAuthStore.js";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 
-const schemaSignup = yup.object({
-  username: yup.string().required().min(8),
-  password: yup.string().required().min(8),
-  comfirmPassword: yup
-    .string()
-    .required()
-    .min(8)
-    .oneOf([yup.ref("password")], "Password's not match"),
-});
 export default {
   components: { Form, Field, ErrorMessage, NavbarTop },
   setup() {
+    const schemaSignup = yup.object({
+      username: yup.string().required().min(8),
+      password: yup.string().required().min(8),
+      comfirmPassword: yup
+        .string()
+        .required()
+        .min(8)
+        .oneOf([yup.ref("password")], "Password's not match"),
+    });
     const router = useRouter();
     const { register } = useAuthStore();
 
@@ -29,20 +29,14 @@ export default {
     };
     checkLogged();
     const handleRegister = async (values) => {
-      const { success, message } = await register({
+      await register({
         username: values.username,
         password: values.password,
         comfirmPassword: values.comfirmPassword,
       });
-      if (success) {
-        router.push("/posts");
-      } else {
-        alert(message);
-      }
     };
     return {
       schemaSignup,
-      router,
       handleRegister,
     };
   },

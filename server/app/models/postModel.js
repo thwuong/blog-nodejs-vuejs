@@ -20,12 +20,6 @@ const blogSchema = new Schema(
       enum: ["technology", "entertainment", "law", "sports", "orther"],
       default: "orther",
     },
-    comments: [
-      {
-        ref: "Comment",
-        type: Schema.Types.ObjectId,
-      },
-    ],
   },
   { timestamps: true }
 );

@@ -1,19 +1,19 @@
 <script>
-import NavbarTop from "@/components/NavbarTop.vue";
+import NavbarTop from "../components/NavbarTop.vue";
 import { Form, Field, ErrorMessage } from "vee-validate";
-import { useAuthStore } from "@/stores/useAuthStore.js";
+import { useAuthStore } from "../stores/useAuthStore.js";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import * as yup from "yup";
 import { onMounted } from "vue";
 
-const schemaSignin = yup.object({
-  username: yup.string().required().min(8),
-  password: yup.string().required().min(8),
-});
 export default {
   components: { Form, Field, ErrorMessage, NavbarTop },
   setup() {
+    const schemaSignin = yup.object({
+      username: yup.string().required().min(8),
+      password: yup.string().required().min(8),
+    });
     const router = useRouter();
     const { login } = useAuthStore();
     const checkLogged = () => {
@@ -28,8 +28,10 @@ export default {
         password: values.password,
       });
     };
-    checkLogged();
-    onMounted(() => {});
+
+    onMounted(() => {
+      checkLogged();
+    });
     return {
       schemaSignin,
       handleLogin,

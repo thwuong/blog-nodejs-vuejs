@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
-import PostService from "@/services/PostService";
-import { useAuthStore } from "@/stores/useAuthStore.js";
+import PostService from "../services/PostService";
 import { storeToRefs } from "pinia";
-
+import { useAuthStore } from "./useAuthStore";
+import { useToast } from "./useToastStore";
 export const usePostStore = defineStore("post", {
   state: () => {
     return {
@@ -21,68 +21,79 @@ export const usePostStore = defineStore("post", {
   actions: {
     // create post
     async createPost(payload) {
+      const { setToast } = useToast();
       try {
         const response = await PostService.createPost(payload);
-        console.log(response);
         if (response.data.success) {
-          return response.data;
+          this.router.push({ name: "ViewPosts" });
+          setToast(response.data);
         }
       } catch (error) {
-        return error.response.data.message || error.message;
+        setToast(error.response.data);
       }
     },
     // delete post
     async removePost(id) {
+      const { setToast } = useToast();
+
       try {
         const response = await PostService.removePost(id);
         if (response.data.success) {
-          return response.data;
+          setToast(response.data);
         }
       } catch (error) {
-        return error.response.data.message || error.message;
+        setToast(error.response.data);
       }
     },
     // edit post
     async editPost(id, payload) {
+      const { setToast } = useToast();
       try {
         const response = await PostService.editPost(id, payload);
         if (response.data.success) {
-          return response.data;
+          this.router.push({ name: "ViewPosts" });
+          setToast(response.data);
         }
       } catch (error) {
-        return error.response.data.message || error.message;
+        setToast(error.response.data);
       }
     },
     // find post
     async fetchPosts(filters) {
+      const { setToast } = useToast();
+
       try {
         const response = await PostService.getPosts(filters);
         if (response.data.success) {
           this.posts = response.data.posts;
-          return response.data;
         }
       } catch (error) {
-        return error.response.data.message || error.message;
+        setToast(error.response.data);
       }
     },
     // findOne
     async findPost(id) {
+      const { setToast } = useToast();
+
       try {
         const response = await PostService.getPost(id);
         if (response.data.success) {
           this.post = response.data.post;
         }
       } catch (error) {
-        return error.response.data.message || error.message;
+        setToast(error.response.data);
+        this.router.push({ name: "NotFound" });
       }
     },
 
     //handlerFavorite
     async favoritePost(id) {
       try {
+        const { setToast } = useToast();
+
         const response = await PostService.likePost(id);
         if (response.data.success) {
-          return response.data;
+          setToast(response.data);
         }
       } catch (error) {
         return error.response.data.message || error.message;

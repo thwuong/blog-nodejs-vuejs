@@ -1,3 +1,0 @@
-frontend
-[] install backpage dev
-	// axios, socket, editor5, vue-router, pinia, vue-sweetalert2 

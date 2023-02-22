@@ -1,9 +1,10 @@
 <script>
-import FormPost from "@/components/FormPost.vue";
-import NavbarTop from "@/components/NavbarTop.vue";
-import { useAuthStore } from "@/stores/useAuthStore.js";
-import { usePostStore } from "@/stores/usePostStore.js";
+import FormPost from "../components/FormPost.vue";
+import NavbarTop from "../components/NavbarTop.vue";
+import { useAuthStore } from "../stores/useAuthStore.js";
+import { usePostStore } from "../stores/usePostStore.js";
 import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 export default {
   components: { FormPost, NavbarTop },
@@ -18,18 +19,13 @@ export default {
         router.push("/posts");
       }
     };
-    checkLogged();
 
     const createNewPost = async (newPost) => {
-      // newPost.append("author", userCurrent.value._id);
-      const { success, message } = await createPost(newPost);
-
-      if (success) {
-        router.push("/posts");
-      } else {
-        alert(message);
-      }
+      await createPost(newPost);
     };
+    onMounted(() => {
+      checkLogged();
+    });
     return {
       userCurrent,
       createNewPost,

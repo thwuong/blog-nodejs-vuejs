@@ -1,5 +1,5 @@
 <template lang="">
-  <div v-if="isToast" class="fixed top-12 right-6">
+  <div v-if="isToast" class="fixed right-6">
     <div
       v-if="success"
       id="toast-success"
@@ -97,7 +97,7 @@
   </div>
 </template>
 <script>
-import { useToast } from "@/stores/useToastStore.js";
+import { useToast } from "../stores/useToastStore";
 import { storeToRefs } from "pinia";
 export default {
   setup() {

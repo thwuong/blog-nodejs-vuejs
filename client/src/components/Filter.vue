@@ -9,6 +9,8 @@ export default {
       "sports",
       "orther",
     ]);
+    const timeOut = ref(null);
+    const timer = 300;
     let selects = [];
     const handleSelected = (e) => {
       if (selects.some((select) => select === e.target.dataset.tag)) {
@@ -18,7 +20,11 @@ export default {
         selects.push(e.target.dataset.tag);
         e.target.classList.add("active");
       }
-      context.emit("select-tags", selects);
+
+      clearTimeout(timeOut.value);
+      timeOut.value = setTimeout(() => {
+        context.emit("select-tags", selects);
+      }, timer);
     };
 
     return {

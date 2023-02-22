@@ -1,6 +1,5 @@
 // models
 const Comment = require("../models/commentModel");
-const Post = require("../models/postModel");
 class CommentController {
   async createComment(req, res) {
     const userId = req.userId;
@@ -17,14 +16,10 @@ class CommentController {
       const newComment = new Comment({
         author: userId,
         body,
-        post: postId,
+        blog: postId,
       });
 
       await newComment.save();
-      await Post.findByIdAndUpdate(
-        { _id: postId },
-        { $push: { comments: newComment._id } }
-      );
 
       res.status(203).json({
         success: true,
@@ -44,12 +39,32 @@ class CommentController {
     const condition = { author: userId, _id: id, post: postId };
     try {
       const commentDeleted = await Comment.findOneAndDelete(condition);
-      await Post.findOneAndUpdate({ _id: postId }, { $pull: { comments: id } });
 
       res.status(203).json({
         success: true,
         message: "deleted comment successfully!",
         commentDeleted,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error!",
+      });
+    }
+  }
+  async getComments(req, res) {
+    const { postId } = req.params;
+    try {
+      const comments = await Comment.find({ blog: postId }).populate(
+        "author",
+        "-password"
+      );
+
+      res.status(203).json({
+        success: true,
+        message: "get comments successfully!",
+        comments,
       });
     } catch (error) {
       console.log(error);

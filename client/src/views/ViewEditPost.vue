@@ -1,8 +1,8 @@
 <script>
-import FormPost from "@/components/FormPost.vue";
-import NavbarTop from "@/components/NavbarTop.vue";
-import { useAuthStore } from "@/stores/useAuthStore.js";
-import { usePostStore } from "@/stores/usePostStore.js";
+import FormPost from "../components/FormPost.vue";
+import NavbarTop from "../components/NavbarTop.vue";
+import { useAuthStore } from "../stores/useAuthStore.js";
+import { usePostStore } from "../stores/usePostStore.js";
 import { storeToRefs } from "pinia";
 import { useRouter, useRoute } from "vue-router";
 import { onMounted } from "vue";
@@ -26,13 +26,7 @@ export default {
       await getProfile();
     };
     const handleEditPost = async (postUpdate) => {
-      const { success, message } = await editPost(postId, postUpdate);
-      if (success) {
-        alert(message);
-        router.push("/auth/profile");
-      } else {
-        alert(message);
-      }
+      await editPost(postId, postUpdate);
     };
     onMounted(() => {
       checkLogged();

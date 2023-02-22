@@ -1,5 +1,5 @@
-import createHttp from "@/api/index";
-import authHeader from "@/services/authHeader";
+import createHttp from "../api/index";
+import authHeader from "./authHeader";
 
 class CommentService {
   constructor() {
@@ -13,6 +13,11 @@ class CommentService {
   }
   async removeComment(id, postId) {
     return await this.http.delete(`/${postId}/delete/${id}`, {
+      headers: authHeader(),
+    });
+  }
+  async getAll(postId) {
+    return await this.http.get(`/${postId}`, {
       headers: authHeader(),
     });
   }

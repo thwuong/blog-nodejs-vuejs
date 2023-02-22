@@ -10,7 +10,22 @@ export default {
       <router-view></router-view>
     </div>
   </div>
-  <Toast />
+  <Transition>
+    <Toast />
+  </Transition>
 </template>
 
-<style></style>
+<style>
+.v-enter-active,
+.v-leave-active {
+  transition: all ease 3s;
+}
+.v-enter-from,
+.v-leave-to {
+  @apply opacity-20 -top-16;
+}
+.v-enter-to,
+.v-leave-form {
+  @apply opacity-100 top-12;
+}
+</style>

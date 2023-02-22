@@ -123,7 +123,7 @@
 </template>
 <script>
 import { storeToRefs } from "pinia";
-import { useModalStore } from "@/stores/useModalStore.js";
+import { useModalStore } from "../stores/useModalStore";
 import { useAuthStore } from "../stores/useAuthStore";
 import { Form, ErrorMessage, Field } from "vee-validate";
 import * as yup from "yup";
@@ -133,7 +133,7 @@ export default {
     const { showModal } = storeToRefs(useModalStore());
     const { removeModal } = useModalStore();
     const { userCurrent } = storeToRefs(useAuthStore());
-    const { updateProfile } = useAuthStore();
+    const { updateProfile, getProfile } = useAuthStore();
     const userSchema = yup.object({
       username: yup.string().min(6).required("don't empty"),
       email: yup.string().email(),
@@ -147,6 +147,7 @@ export default {
 
       await updateProfile(formData);
       removeModal();
+      await getProfile();
     };
     return { showModal, removeModal, userSchema, handlerSubmit, userCurrent };
   },

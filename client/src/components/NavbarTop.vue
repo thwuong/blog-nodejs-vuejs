@@ -1,5 +1,5 @@
 <script>
-import { useAuthStore } from "@/stores/useAuthStore.js";
+import { useAuthStore } from "../stores/useAuthStore";
 import { storeToRefs } from "pinia";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
@@ -46,7 +46,7 @@ export default {
           </router-link>
         </div>
         <ul class="navbar__menu flex gap-6 items-center">
-          <li :class="['btn btn-add']" v-if="loggedIn">
+          <li :class="['btn btn-primary']" v-if="loggedIn">
             <router-link to="/post/newpost">Add Post</router-link>
           </li>
           <li
@@ -58,24 +58,7 @@ export default {
           >
             <router-link to="/posts">Posts</router-link>
           </li>
-          <li
-            :class="[
-              props.itemActive == 'categories' ? classActive : '',
-              'navbar__item',
-              'hover:text-orange-400',
-            ]"
-          >
-            <router-link to="/products">Categories</router-link>
-          </li>
-          <li
-            :class="[
-              props.itemActive == 'contact' ? classActive : '',
-              'navbar__item',
-              'hover:text-orange-400',
-            ]"
-          >
-            <router-link to="/products">Contact</router-link>
-          </li>
+
           <li class="navbar__item flex gap-3 items-center" v-if="!loggedIn">
             <router-link to="/auth/login"
               ><span

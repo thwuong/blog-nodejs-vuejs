@@ -4,11 +4,18 @@ export default {
   setup(props, context) {
     const isClear = ref(false);
     const keyword = ref("");
+    let timer = 300;
+    const timeOut = ref(null);
+
     const searchPosts = (e) => {
       const keyWord = e.target.value;
-      isClear.value = keyWord ? true : false;
-      context.emit("search-posts", keyWord);
+      clearTimeout(timeOut.value);
+      timeOut.value = setTimeout(() => {
+        isClear.value = keyWord ? true : false;
+        context.emit("search-posts", keyWord);
+      }, timer);
     };
+
     const clearContentSearch = (e) => {
       keyword.value = "";
       isClear.value = false;

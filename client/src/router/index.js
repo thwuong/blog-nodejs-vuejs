@@ -6,7 +6,7 @@ import ViewCreatePost from "@/views/ViewCreatePost.vue";
 import ViewEditPost from "@/views/ViewEditPost.vue";
 import ViewLogin from "@/views/ViewLogin.vue";
 import ViewRegister from "@/views/ViewRegister.vue";
-import ViewDetail from "@/views/ViewDetails.vue";
+import ViewDetail from "@/views/ViewDetail.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

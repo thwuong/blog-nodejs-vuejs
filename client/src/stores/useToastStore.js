@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const useToast = defineStore("Toast", {
   state: () => {
     return {
-      isToast: true,
+      isToast: false,
       message: "",
       success: false,
     };
@@ -16,7 +16,7 @@ export const useToast = defineStore("Toast", {
 
       setTimeout(() => {
         this.removeToast();
-      }, 2500);
+      }, 2000);
     },
     removeToast() {
       this.isToast = false;

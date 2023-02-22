@@ -1,11 +1,11 @@
 <script>
-import NavbarTop from "@/components/NavbarTop.vue";
-import Card from "@/components/Card.vue";
-import Modal from "@/components/Modal.vue";
+import NavbarTop from "../components/NavbarTop.vue";
+import Card from "../components/Card.vue";
+import Modal from "../components/Modal.vue";
 
-import { useModalStore } from "@/stores/useModalStore.js";
-import { useAuthStore } from "@/stores/useAuthStore.js";
-import { usePostStore } from "@/stores/usePostStore.js";
+import { useModalStore } from "../stores/useModalStore.js";
+import { useAuthStore } from "../stores/useAuthStore.js";
+import { usePostStore } from "../stores/usePostStore.js";
 import { storeToRefs } from "pinia";
 
 import { useRouter } from "vue-router";
@@ -30,12 +30,7 @@ export default {
     };
 
     const handleRemovePost = async (id) => {
-      const { success, message } = await removePost(id);
-      if (success) {
-        fetchPosts();
-      } else {
-        alert(message);
-      }
+      await removePost(id);
     };
     onMounted(() => {
       checkLogged();

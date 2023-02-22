@@ -1,11 +1,12 @@
 <script>
-import Card from "@/components/Card.vue";
-import NavbarTop from "@/components/NavbarTop.vue";
-import Search from "@/components/Search.vue";
-import Filter from "@/components/Filter.vue";
+import Card from "../components/Card.vue";
+import NavbarTop from "../components/NavbarTop.vue";
+import Search from "../components/Search.vue";
+import Filter from "../components/Filter.vue";
 
 import { useAuthStore } from "../stores/useAuthStore";
-import { usePostStore } from "@/stores/usePostStore.js";
+import { usePostStore } from "../stores/usePostStore.js";
+import { useToast } from "../stores/useToastStore";
 import { storeToRefs } from "pinia";
 
 import { reactive, onMounted } from "vue";
@@ -22,9 +23,10 @@ export default {
       tags: "",
     });
 
+    const { setToast } = useToast();
     const { loggedIn } = storeToRefs(useAuthStore());
     const { posts } = storeToRefs(usePostStore());
-    const { fetchPosts, likePost, favoritePost } = usePostStore();
+    const { fetchPosts, favoritePost } = usePostStore();
     const searchingPosts = async (keyword) => {
       filters.keyword = keyword;
       await fetchPosts(filters);
@@ -37,18 +39,10 @@ export default {
       filters.keyword = "";
       fetchPosts(filters);
     };
-    const vottingPost = async (id) => {
-      console.log(loggedIn.value);
-      if (!loggedIn.value) {
-        alert("ban chua login");
-      } else {
-        await likePost(id);
-        fetchPosts();
-      }
-    };
+
     const favingPost = async (id) => {
       if (!loggedIn.value) {
-        alert("ban chua login");
+        setToast({ success: false, message: "user need signing" });
       } else {
         await favoritePost(id);
         fetchPosts();
@@ -62,7 +56,6 @@ export default {
       searchingPosts,
       clearContentSearching,
       sortingPosts,
-      vottingPost,
       favingPost,
     };
   },

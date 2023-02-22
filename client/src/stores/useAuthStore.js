@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { useToast } from "../stores/useToastStore";
-import AuthService from "@/services/AuthService";
+import { useToast } from "./useToastStore";
+import AuthService from "../services/AuthService";
 const token = JSON.parse(localStorage.getItem("user"));
 
 export const useAuthStore = defineStore("auth", {
@@ -36,42 +36,51 @@ export const useAuthStore = defineStore("auth", {
       }
     },
     async register(payload) {
+      const { setToast } = useToast();
+
       try {
         const response = await AuthService.register(payload);
         localStorage.setItem("user", JSON.stringify(response.data.token));
         if (response.data.success) {
           this.loggedIn = response.data.success;
-          return response.data;
+          this.router.push({ name: "ViewPosts" });
+          setToast(response.data);
         }
       } catch (error) {
-        return error.response.data || error.message;
+        setToast(error.response.data);
       }
     },
     async updateProfile(payload) {
+      const { setToast } = useToast();
+
       try {
         const response = await AuthService.updateProfile(payload);
         if (response.data.success) {
-          return response.data;
+          setToast(response.data);
         }
       } catch (error) {
-        return error.response.data || error.message;
+        setToast(error.response.data);
       }
     },
     async getProfile() {
+      const { setToast } = useToast();
+
       try {
         const response = await AuthService.getUser();
         if (response.data.success) {
           this.userCurrent = response.data.user;
-          return response.data;
         }
       } catch (error) {
-        return error.response.data || error.message;
+        setToast(error.response.data);
       }
     },
     logout() {
+      const { setToast } = useToast();
+
       localStorage.removeItem("user");
       this.userCurrent = {};
       this.loggedIn = !this.loggedIn;
+      setToast({ success: true, message: "Logouted successfully!" });
     },
   },
 });

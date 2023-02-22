@@ -1,5 +1,5 @@
-import createHttp from "@/api/index";
-import authHeader from "@/services/authHeader";
+import createHttp from "../api/index";
+import authHeader from "./authHeader";
 
 class PostService {
   constructor() {
