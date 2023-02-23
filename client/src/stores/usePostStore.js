@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import PostService from "../services/PostService";
+import PostService from "../services/PostService.js";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "./useAuthStore";
 import { useToast } from "./useToastStore";

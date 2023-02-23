@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { useToast } from "./useToastStore";
-import CommentService from "../services/CommentService";
+import CommentService from "../services/CommentService.js";
 
 export const useCommentStore = defineStore("comment", {
   state: () => {
